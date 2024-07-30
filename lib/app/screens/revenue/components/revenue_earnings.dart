@@ -19,71 +19,71 @@ class RevenueEarnings extends StatelessWidget {
             color: AppColors().kPrimaryBackgroundColor,
             child: Column(
               children: [
-                InkWell(
-                  onTap: () async {
-                    List pickedDates =
-                        await RevenueFunctions().selectDateRange(context);
-                    List formattedPickedDates =
-                        RevenueFunctions().formatPickedDates(pickedDates);
-                    BlocProvider.of<RevenueBloc>(context)
-                      ..add(RevenueSetEarningsPickedDates(
-                          data: formattedPickedDates));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
-                                color: AppColors().kPrimaryWhite),
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              children: [
-                                Icon(Icons.calendar_month_outlined),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(state.displayEarningsDate[0]),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('to'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
-                                color: AppColors().kPrimaryWhite),
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              children: [
-                                Icon(Icons.calendar_month_outlined),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(state.displayEarningsDate[1]),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                      Icon(Icons.arrow_circle_up_sharp)
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
+                // InkWell(
+                //   onTap: () async {
+                //     List pickedDates =
+                //         await RevenueFunctions().selectDateRange(context);
+                //     List formattedPickedDates =
+                //         RevenueFunctions().formatPickedDates(pickedDates);
+                //     BlocProvider.of<RevenueBloc>(context)
+                //       ..add(RevenueSetEarningsPickedDates(
+                //           data: formattedPickedDates));
+                //   },
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Row(
+                //         children: [
+                //           Container(
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(
+                //                   10,
+                //                 ),
+                //                 color: AppColors().kPrimaryWhite),
+                //             padding: EdgeInsets.all(10),
+                //             child: Row(
+                //               children: [
+                //                 Icon(Icons.calendar_month_outlined),
+                //                 SizedBox(
+                //                   width: 10,
+                //                 ),
+                //                 Text(state.displayEarningsDate[0]),
+                //               ],
+                //             ),
+                //           ),
+                //           SizedBox(
+                //             width: 5,
+                //           ),
+                //           Text('to'),
+                //           SizedBox(
+                //             width: 5,
+                //           ),
+                //           Container(
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(
+                //                   10,
+                //                 ),
+                //                 color: AppColors().kPrimaryWhite),
+                //             padding: EdgeInsets.all(10),
+                //             child: Row(
+                //               children: [
+                //                 Icon(Icons.calendar_month_outlined),
+                //                 SizedBox(
+                //                   width: 10,
+                //                 ),
+                //                 Text(state.displayEarningsDate[1]),
+                //               ],
+                //             ),
+                //           )
+                //         ],
+                //       ),
+                //       Icon(Icons.arrow_circle_up_sharp)
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 15,
+                // ),
                 (state.isLoading == false)
                     ? Column(
                         children: state.earningsData.map<Widget>((e) {

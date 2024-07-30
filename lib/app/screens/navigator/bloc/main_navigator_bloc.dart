@@ -16,8 +16,6 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, MainNavigatorState> {
   MainNavigatorBloc() : super(MainNavigatorInitial()) {
     List screens = [
       DashboardScreen(),
-      // WorkersScreen(),
-      Container(),
       RevenueScreen(),
       SettingsScreen(),
     ];

@@ -48,18 +48,10 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
         }
 
         earningsData = await ApiClient.get(
-            'api/v1/pools/sub_account/earnings/?start_date=' +
-                resEarningsDate[0] +
-                '&end_date=' +
-                resEarningsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/earnings/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
         payoutsData = await ApiClient.get(
-            'api/v1/pools/sub_account/payouts/?start_date=' +
-                resPayoutsDate[0] +
-                '&end_date=' +
-                resPayoutsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/payouts/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
 
         isLoading = false;
@@ -76,11 +68,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
         resEarningsDate =
             RevenueFunctions().convertResultDate(displayEarningsDate);
         earningsData = await ApiClient.get(
-            'api/v1/pools/sub_account/earnings/?start_date=' +
-                resEarningsDate[0] +
-                '&end_date=' +
-                resEarningsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/earnings/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
         emit(RevenueLoaded(
             isLoading: isLoading,
@@ -96,11 +84,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
         resPayoutsDate =
             RevenueFunctions().convertResultDate(displayPayoutsDate);
         payoutsData = await ApiClient.get(
-            'api/v1/pools/sub_account/payouts/?start_date=' +
-                resPayoutsDate[0] +
-                '&end_date=' +
-                resPayoutsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/payouts/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
         emit(RevenueLoaded(
             earningsData: earningsData,
@@ -127,18 +111,10 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
               RevenueFunctions().convertResultDate(displayPayoutsDate);
         }
         earningsData = await ApiClient.get(
-            'api/v1/pools/sub_account/earnings/?start_date=' +
-                resEarningsDate[0] +
-                '&end_date=' +
-                resEarningsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/earnings/?sub_account_name=' +
                 accountsData[event.index]['name']);
         payoutsData = await ApiClient.get(
-            'api/v1/pools/sub_account/payouts/?start_date=' +
-                resPayoutsDate[0] +
-                '&end_date=' +
-                resPayoutsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/payouts/?sub_account_name=' +
                 accountsData[event.index]['name']);
         emit(RevenueLoaded(
             earningsData: earningsData,
@@ -150,11 +126,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
       if (event is RevenueLoadEarnings) {
         int selectedSubAccount = await AuthUtils.getIndexSubAccount();
         earningsData = await ApiClient.get(
-            'api/v1/pools/sub_account/earnings/?start_date=' +
-                resEarningsDate[0] +
-                '&end_date=' +
-                resEarningsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/earnings/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
         emit(RevenueLoaded(
             earningsData: earningsData,
@@ -166,11 +138,7 @@ class RevenueBloc extends Bloc<RevenueEvent, RevenueState> {
       if (event is RevenueLoadPayouts) {
         int selectedSubAccount = await AuthUtils.getIndexSubAccount();
         payoutsData = await ApiClient.get(
-            'api/v1/pools/sub_account/payouts/?start_date=' +
-                resPayoutsDate[0] +
-                '&end_date=' +
-                resPayoutsDate[1] +
-                '&sub_account_name=' +
+            'api/v1/pools/sub_account/payouts/?sub_account_name=' +
                 accountsData[selectedSubAccount]['name']);
         emit(RevenueLoaded(
             earningsData: earningsData,

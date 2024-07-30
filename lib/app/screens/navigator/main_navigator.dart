@@ -49,7 +49,7 @@ class CustomNavigationBar extends StatelessWidget {
                         },
                         child: NavigationItem(
                             assetImage: 'assets/icons/payment.svg',
-                            isSelected: (state.index == 2) ? true : false,
+                            isSelected: (state.index == 1) ? true : false,
                             text: LocaleKeys.revenue.tr()),
                       ),
                       InkWell(
@@ -59,7 +59,7 @@ class CustomNavigationBar extends StatelessWidget {
                         },
                         child: NavigationItem(
                             assetImage: 'assets/icons/settings.svg',
-                            isSelected: (state.index == 3) ? true : false,
+                            isSelected: (state.index == 2) ? true : false,
                             text: LocaleKeys.settings.tr()),
                       ),
                     ],
