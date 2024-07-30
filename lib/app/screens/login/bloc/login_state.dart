@@ -16,3 +16,15 @@ final class LoginError extends LoginState {
   final String message;
   LoginError({required this.message});
 }
+
+final class LoginOtp extends LoginState {
+  String oathToken;
+  LoginOtp({required this.oathToken});
+}
+
+final class LoginUpdateShow extends LoginState {}
+
+final class LoginUnVerifiedEmail extends LoginState {
+  final String email;
+  LoginUnVerifiedEmail({required this.email});
+}

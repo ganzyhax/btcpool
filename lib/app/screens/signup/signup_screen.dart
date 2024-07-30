@@ -1,15 +1,22 @@
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:btcpool_app/app/screens/login/bloc/login_bloc.dart';
 import 'package:btcpool_app/app/screens/login/login_screen.dart';
 import 'package:btcpool_app/app/screens/navigator/main_navigator.dart';
 import 'package:btcpool_app/app/screens/signup/bloc/signup_bloc.dart';
 import 'package:btcpool_app/app/screens/signup/components/verify_code_page.dart';
 import 'package:btcpool_app/app/widgets/buttons/custom_button.dart';
+import 'package:btcpool_app/app/widgets/buttons/custom_dropdown_button.dart';
+import 'package:btcpool_app/app/widgets/custom_indicator.dart';
 import 'package:btcpool_app/app/widgets/custom_snackbar.dart';
 import 'package:btcpool_app/app/widgets/textfields/custom_textfiled.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinput/pinput.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -32,6 +39,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? emailValidator;
   String? passwordValidator;
   String? passwordMatchValidator;
+  bool passwordShow = true;
+  bool passwordrShow = true;
 
   String? phoneValidator;
   @override
@@ -40,10 +49,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // Setup a listener to update the UI based on text changes
     username.addListener(_onTextChanged);
     email.addListener(_onTextChangedEmail);
-    fio.addListener(_onTextChanged);
-    bin.addListener(_onTextChanged);
     password.addListener(_onTextChangedPass);
-    phone.addListener(_onTextChangedPhone);
+
     rpassword.addListener(_onTextChangedRPass);
   }
 
@@ -62,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
     } else {
       setState(() {
-        emailValidator = 'Please enter a valid email address.';
+        emailValidator = LocaleKeys.please_enter_valid_email_address.tr();
       });
     }
   }
@@ -70,11 +77,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _onTextChangedPass() {
     setState(() {});
     if (password.text.length < 8) {
-      passwordValidator = 'Ensure this field has at least 8 characters.';
+      passwordValidator = LocaleKeys.ensure_at_least_8_characters.tr();
     } else {
       if (rpassword.text.length > 8) {
         if (rpassword.text != password.text) {
-          passwordMatchValidator = 'Passwords are dont math.';
+          passwordMatchValidator = LocaleKeys.passwords_do_not_match.tr();
         } else {
           passwordMatchValidator = '';
         }
@@ -84,20 +91,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {});
   }
 
-  void _onTextChangedPhone() {
-    setState(() {});
-    if (phone.text.length != 11) {
-      phoneValidator = 'Incorrect format phone.';
-    } else {
-      phoneValidator = '';
-    }
-    setState(() {});
-  }
-
   void _onTextChangedRPass() {
     setState(() {});
     if (password.text != rpassword.text) {
-      passwordMatchValidator = 'Passwords are dont math.';
+      passwordMatchValidator = LocaleKeys.passwords_do_not_match.tr();
     } else {
       passwordMatchValidator = '';
     }
@@ -111,19 +108,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
+  final MultiSelectController<String> controller = MultiSelectController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
           child: SizedBox(
-            width: 120,
-            child: Image.asset(
-              'assets/images/btcpool_logo.png',
-            ),
-          ),
+              width: 120,
+              child: (Theme.of(context).brightness == Brightness.dark)
+                  ? Image.asset('assets/images/btcpool_logo.png')
+                  : Image.asset('assets/images/btcpool_logo.png')),
         ),
       ),
       body: BlocListener<SignupBloc, SignupState>(
@@ -137,9 +135,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             );
           }
           if (state is SignupSuccess) {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => LoginScreen()),
-            );
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => CustomNavigationBar()),
+                (Route<dynamic> route) => false);
           }
           if (state is SignupError) {
             CustomSnackbar().showCustomSnackbar(context, state.message, false);
@@ -153,156 +151,226 @@ class _SignUpScreenState extends State<SignUpScreen> {
             if (state is SignupLoaded) {
               return SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Center(
                         child: Text(
-                          'Sign Up',
-                          style: TextStyle(
+                          LocaleKeys.sign_up.tr(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
                       ),
-                      Text('User name'),
-                      SizedBox(
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Text(LocaleKeys.user_name.tr()),
+                      const SizedBox(
                         height: 7,
                       ),
                       CustomTextField(
-                        hintText: 'Username',
+                        hintText: LocaleKeys.user_name.tr(),
                         controller: username,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 7,
                       ),
-                      Text('Email'),
-                      SizedBox(
+                      Text(LocaleKeys.email.tr()),
+                      const SizedBox(
                         height: 7,
                       ),
                       CustomTextField(
-                        hintText: 'Email',
+                        hintText: LocaleKeys.email.tr(),
                         controller: email,
                       ),
                       (emailValidator == '' || emailValidator == null)
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Text(
                               emailValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.red),
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 7,
                       ),
-                      Text('Full name'),
-                      SizedBox(
+                      Text(LocaleKeys.choose_country.tr()),
+                      const SizedBox(
                         height: 7,
                       ),
-                      CustomTextField(
-                        hintText: 'Full name',
-                        controller: fio,
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('Phone'),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        hintText: 'Phone',
-                        controller: phone,
-                      ),
-                      (phoneValidator == '' || phoneValidator == null)
-                          ? SizedBox()
-                          : Text(
-                              phoneValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('BIN'),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        maxLength: 12,
-                        hintText: 'BIN',
-                        isNumber: true,
-                        controller: bin,
-                        onChanged: (value) {
-                          if (value.length == 12) {
-                            BlocProvider.of<SignupBloc>(context)
-                              ..add(SignupFindBin(value: value));
-                          }
+                      MultiSelectDropDown<String>(
+                        controller: controller,
+                        hint: LocaleKeys.select.tr(),
+                        onOptionSelected:
+                            (List<ValueItem<String>> selectedOptions) {
+                          String val = selectedOptions.first.value.toString();
+
+                          BlocProvider.of<SignupBloc>(context).add(
+                              SignupSetCountryCode(countryId: int.parse(val)));
+
+                          controller.hideDropdown();
+                          controller.hideDropdown();
                         },
+                        options:
+                            state.countries.map<ValueItem<String>>((countries) {
+                          return ValueItem<String>(
+                            label: countries['name_official'].toString(),
+                            value: countries['id'].toString(),
+                          );
+                        }).toList(),
+                        selectionType: SelectionType.single,
+                        chipConfig: const ChipConfig(wrapType: WrapType.wrap),
+                        dropdownHeight: 200,
+                        searchLabel: LocaleKeys.search.tr(),
+                        searchEnabled: true,
+                        optionTextStyle: const TextStyle(
+                          fontSize: 16,
+                        ),
+                        selectedOptionTextColor: AppColors().kPrimaryGreen,
+                        selectedOptionBackgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        searchBackgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        fieldBackgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        focusedBorderColor:
+                            Theme.of(context).colorScheme.secondary,
+                        dropdownBackgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        optionsBackgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        selectedOptionIcon: const Icon(Icons.check_circle),
                       ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      (state.findedBin == '')
-                          ? SizedBox()
-                          : (state.findedBin == 'null')
-                              ? Text(
-                                  'Пожалуйста, введите правильный BIN',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                )
-                              : Text(
-                                  state.findedBin,
-                                  style: TextStyle(
-                                      color: Colors.green, fontSize: 12),
-                                ),
-                      SizedBox(
+                      const SizedBox(
                         height: 7,
                       ),
-                      Text('Password'),
-                      SizedBox(
+                      Text(LocaleKeys.password.tr()),
+                      const SizedBox(
                         height: 7,
                       ),
                       CustomTextField(
                         controller: password,
                         hintText: '********',
                         isPassword: true,
+                        passwordShow: passwordShow,
+                        onTapIcon: () {
+                          if (passwordShow) {
+                            setState(() {
+                              passwordShow = false;
+                            });
+                          } else {
+                            setState(() {
+                              passwordShow = true;
+                            });
+                          }
+                        },
                       ),
                       (passwordValidator == '' || passwordValidator == null)
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Text(
                               passwordValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.red),
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 7,
                       ),
-                      Text('Repeat password'),
-                      SizedBox(
+                      Text(LocaleKeys.repeat_password.tr()),
+                      const SizedBox(
                         height: 7,
                       ),
                       CustomTextField(
                         controller: rpassword,
                         hintText: '********',
                         isPassword: true,
+                        passwordShow: passwordrShow,
+                        onTapIcon: () {
+                          if (passwordrShow) {
+                            setState(() {
+                              passwordrShow = false;
+                            });
+                          } else {
+                            setState(() {
+                              passwordrShow = true;
+                            });
+                          }
+                        },
                       ),
                       (passwordMatchValidator == '' ||
                               passwordMatchValidator == null)
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Text(
                               passwordMatchValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.red),
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 7,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'I agree to the Terms & Conditions and Privacy Policy',
-                            style: TextStyle(fontSize: 12),
-                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.2,
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    style: TextStyle(
+                                        color: (Theme.of(context)
+                                                    .colorScheme
+                                                    .brightness ==
+                                                Brightness.dark)
+                                            ? Colors.white
+                                            : Colors.black),
+                                    text: LocaleKeys
+                                            .by_continuing_you_agree_to_our
+                                            .tr() +
+                                        ' ',
+                                  ),
+                                  TextSpan(
+                                    text: LocaleKeys.terms_and_conditions.tr(),
+                                    style: const TextStyle(color: Colors.blue),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        const privacyUrl =
+                                            'https://21pool.io/terms-in-use/en';
+                                        if (await canLaunch(privacyUrl)) {
+                                          await launch(privacyUrl);
+                                        } else {}
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text: '${' ' + LocaleKeys.and.tr()} ',
+                                    style: TextStyle(
+                                        color: (Theme.of(context)
+                                                    .colorScheme
+                                                    .brightness ==
+                                                Brightness.dark)
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: LocaleKeys.privacy_policy.tr(),
+                                    style: const TextStyle(color: Colors.blue),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        const privacyUrl =
+                                            'https://21pool.io/policy/en';
+                                        if (await canLaunch(privacyUrl)) {
+                                          await launch(privacyUrl);
+                                        } else {}
+                                      },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       CustomButton(
@@ -315,27 +383,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   organization_bin: bin.text,
                                   phone: phone.text));
                         },
-                        text: 'Sign Up',
-                        isEnable:
-                            (email.text.isEmpty && username.text.isEmpty ||
-                                    state.findedBin == '' ||
-                                    state.findedBin == 'null' ||
-                                    emailValidator != '' ||
-                                    passwordValidator != '' ||
-                                    passwordMatchValidator != '' ||
-                                    phone.text.isEmpty ||
-                                    password.text.isEmpty ||
-                                    rpassword.text.isEmpty)
-                                ? false
-                                : true,
+                        text: LocaleKeys.sign_up.tr(),
+                        isEnable: (email.text.isEmpty ||
+                                username.text.isEmpty ||
+                                emailValidator != '' ||
+                                passwordValidator != '' ||
+                                passwordMatchValidator != '' ||
+                                password.text.isEmpty ||
+                                rpassword.text.isEmpty)
+                            ? false
+                            : true,
+                        isLoading: state.isLoading,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Already have an account?  '),
+                          Text(LocaleKeys.already_have_an_account.tr() + '  '),
                           InkWell(
                             onTap: () {
                               Navigator.push(
@@ -345,8 +411,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               );
                             },
                             child: Text(
-                              'Log In',
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              LocaleKeys.log_in.tr(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           )
                         ],
@@ -356,7 +423,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               );
             }
-            return Container();
+            return Center(
+              child: CustomIndicator(),
+            );
           },
         ),
       ),

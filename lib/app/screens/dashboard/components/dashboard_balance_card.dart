@@ -1,72 +1,73 @@
 import 'package:btcpool_app/data/const.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardInfoCard extends StatelessWidget {
   final data;
   final String title;
-  const DashboardInfoCard({super.key, required this.data, required this.title});
+  final double btcPrice;
+
+  const DashboardInfoCard(
+      {super.key,
+      required this.data,
+      required this.title,
+      required this.btcPrice});
 
   @override
   Widget build(BuildContext context) {
+    double d = data * btcPrice;
+    String priceInUsd = d.toStringAsFixed(2);
     return Container(
-      width: MediaQuery.of(context).size.width / 2.2,
-      padding: EdgeInsets.all(8),
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: AppColors().kPrimaryWhite),
+          color: Theme.of(context).colorScheme.secondary),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 16),
-          ),
-          SizedBox(
+            style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
+          ).tr(),
+          const SizedBox(
             height: 5,
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: 30,
-                child: Image.asset('assets/images/btc_logo.png'),
-              ),
-              SizedBox(
-                width: 10,
-              ),
               Row(
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  SizedBox(
+                    height: 45,
+                    child: Image.asset('assets/images/btc_logo.png'),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Row(
                     children: [
-                      SizedBox(
-                          width: 80,
-                          child: Text(
-                            data.toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
-                      SizedBox(
-                        width: 80,
-                        child: Text(
-                          '=' + data.toString() + '\$',
-                          style: TextStyle(color: AppColors().kPrimaryGrey),
-                        ),
-                      )
+                      Text(
+                        data.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 21),
+                      ),
+                      Text(
+                        '≈' + priceInUsd + '\$',
+                        style: TextStyle(
+                            color: AppColors().kPrimaryGrey, fontSize: 21),
+                      ),
                     ],
                   ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    'BTC',
-                    style: TextStyle(color: AppColors().kPrimaryGrey),
-                  )
                 ],
               ),
-              SizedBox(
-                height: 5,
-              ),
+              Text(
+                'BTC',
+                style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
+                textAlign: TextAlign.end,
+              )
             ],
           )
         ],

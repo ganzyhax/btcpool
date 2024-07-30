@@ -7,5 +7,6 @@ final class ApiInitial extends ApiState {}
 
 final class ApiLoaded extends ApiState {
   final data;
-  ApiLoaded({required this.data});
+  bool isLoading;
+  ApiLoaded({required this.data, required this.isLoading});
 }

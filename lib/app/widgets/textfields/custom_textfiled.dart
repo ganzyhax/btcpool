@@ -1,3 +1,4 @@
+import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -8,16 +9,20 @@ class CustomTextField extends StatelessWidget {
   final bool? isNumber;
   final bool? passwordShow;
   final int? maxLength;
+  final bool? isEnabled;
+  final FocusNode? focusNode;
   final Function()? onTapIcon;
   final String? Function(String?)? validator;
   final Function(String value)? onChanged;
   final Function(PointerDownEvent value)? onTapOutside;
-  CustomTextField(
+  const CustomTextField(
       {Key? key,
       required this.hintText,
       this.suffixIcon,
       this.passwordShow,
+      this.focusNode,
       this.isPassword,
+      this.isEnabled = true,
       this.onTapIcon,
       this.onTapOutside,
       this.maxLength,
@@ -31,12 +36,19 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white, // TextField background color
+        color: Theme.of(context)
+            .colorScheme
+            .secondary, // TextField background color
         border: Border.all(color: Colors.grey), // Border color
         borderRadius: BorderRadius.circular(30), // Border radius
       ),
       child: Center(
         child: TextFormField(
+            focusNode: (focusNode != null) ? focusNode : null,
+            cursorColor: (Theme.of(context).brightness == Brightness.light)
+                ? Colors.black
+                : Colors.white,
+            enabled: (isEnabled == true) ? true : false,
             // onSubmitted: onSubmit,
             keyboardType:
                 (isNumber == null) ? TextInputType.text : TextInputType.number,
@@ -59,11 +71,13 @@ class CustomTextField extends StatelessWidget {
                         (passwordShow == false)
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        color: Theme.of(context).primaryColorDark,
+                        color: AppColors().kPrimaryGrey,
                       ),
                       onPressed: onTapIcon,
                     )
-                  : null,
+                  : (suffixIcon == null)
+                      ? null
+                      : Icon(suffixIcon),
               counterText: '',
               hintText: hintText, // Display hint text
               border: InputBorder.none, // Remove underline
@@ -71,7 +85,9 @@ class CustomTextField extends StatelessWidget {
                   left: 20,
                   top: (isPassword == true)
                       ? 10
-                      : 0), // Adjust padding as needed
+                      : (suffixIcon != null)
+                          ? 10
+                          : 0001), // Adjust padding as needed
               // Icon on the right side
             )),
       ),

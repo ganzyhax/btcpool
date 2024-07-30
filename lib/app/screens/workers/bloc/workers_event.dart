@@ -9,3 +9,19 @@ class WorkersChangeIndex extends WorkersEvent {
   int index;
   WorkersChangeIndex({required this.index});
 }
+
+class WorkersSubAccountIndexChange extends WorkersEvent {
+  int index;
+  WorkersSubAccountIndexChange({required this.index});
+}
+
+class WorkersClear extends WorkersEvent {}
+
+class WorkersSubaccountUpdate extends WorkersEvent {}
+
+class WorkersRefresh extends WorkersEvent {}
+
+class WorkersSearch extends WorkersEvent {
+  String value;
+  WorkersSearch({required this.value});
+}

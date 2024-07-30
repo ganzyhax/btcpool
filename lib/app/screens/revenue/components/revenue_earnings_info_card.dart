@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:btcpool_app/app/screens/dashboard/functions/functions.dart';
 import 'package:btcpool_app/app/widgets/appbar/custom_title_appbar.dart';
 import 'package:btcpool_app/app/widgets/buttons/custom_button.dart';
 import 'package:btcpool_app/app/widgets/custom_data_card.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 
 class RevenueEarningsInfoCard extends StatelessWidget {
   final data;
@@ -11,17 +13,25 @@ class RevenueEarningsInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Locale currentLocale = context.locale;
+
+    List<dynamic> profitDetail = data['profit_detail'];
+
     DateTime dateTime = DateTime.parse(data['date'].toString());
-    String date = DateFormat('MMM d, yyyy, HH:mm').format(dateTime);
+    String date = DateFormat('MMM d, yyyy, HH:mm', currentLocale.toString())
+        .format(dateTime);
+    double convertedHashrate = double.parse(
+        (double.parse(data['hashrate'].toString()) / 1e6).toStringAsFixed(3));
+    String profit =
+        (data['total_profit'] / convertedHashrate).toStringAsFixed(8);
     String hashrate =
-        (double.parse(data['hashrate'].toString()) / 1e10).toStringAsFixed(3);
+        DashboardFunctions().hashrateConverter(data['hashrate'], 3)[0];
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: CustomTitleAppBar(
-          title: 'Earnings',
+          title: LocaleKeys.earnings.tr(),
         ),
       ),
       body: Padding(
@@ -30,76 +40,67 @@ class RevenueEarningsInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomDataCard(
-              title: 'Date',
+              title: LocaleKeys.date.tr(),
               data: date,
             ),
             CustomDataCard(
-              title: 'Hashrate',
-              data: hashrate + ' TH/s',
+              title: LocaleKeys.hashrate.tr(),
+              data: '$hashrate ' +
+                  DashboardFunctions()
+                      .hashrateConverter(data['hashrate'], 3)[1],
             ),
             CustomDataCard(
-              title: 'Income',
-              data: '0.00010152 BTC',
+              title: LocaleKeys.income.tr(),
+              data: '${data['total_profit']} BTC',
             ),
             CustomDataCard(
-              title: 'Est. Profitability (1 TH/s)',
-              data: data['total_profit'].toString(),
+              title: 'BTC / 1 TH',
+              data: profit,
             ),
             CustomDataCard(
-              title: 'Calculation method',
+              title: LocaleKeys.calculation_method.tr(),
               data: 'FPPS',
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
-              'Reward split',
-              style: TextStyle(fontWeight: FontWeight.w600),
+              LocaleKeys.reward_split.tr(),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Split'),
-                  Text('Account name'),
-                  Text('Amount'),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('60%'),
-                  Text('Bitcoind account'),
-                  Text('0.0000018434 BTC'),
-                ],
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('60%'),
-                Text('Bitcoind account'),
-                Text('0.0000018434 BTC'),
+            DataTable(
+              dividerThickness: 0.0,
+              dataRowHeight: 40,
+              horizontalMargin: 0,
+              columns: [
+                DataColumn(
+                    label: Text(LocaleKeys.split.tr(),
+                        style: const TextStyle(fontSize: 13))),
+                DataColumn(
+                    label: Text(
+                  LocaleKeys.account_name.tr(),
+                  style: const TextStyle(fontSize: 13),
+                )),
+                DataColumn(
+                    label: Text(LocaleKeys.amount.tr(),
+                        style: const TextStyle(fontSize: 13))),
               ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('60%'),
-                Text('Bitcoind account'),
-                Text('0.0000018434 BTC'),
-              ],
+              rows: profitDetail.map((detail) {
+                return DataRow(
+                  cells: [
+                    DataCell(Text(
+                        '${detail['percentage'].toString().split('.')[0]}%',
+                        textAlign: TextAlign.center)),
+                    DataCell(Text(detail['name'].toString(),
+                        textAlign: TextAlign.center)),
+                    DataCell(Text('${detail['profit']} BTC',
+                        textAlign: TextAlign.center)),
+                  ],
+                );
+              }).toList(),
             ),
           ],
         ),

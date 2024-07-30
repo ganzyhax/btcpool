@@ -1,84 +1,86 @@
-import 'package:btcpool_app/api/api.dart';
-import 'package:hive/hive.dart';
-
 class DashboardFunctions {
+//================================================================================================================================
+  List<DateTime> getLastHourDivided(int segments) {
+    List<DateTime> result = [];
+    DateTime now = DateTime.now();
+
+    // Calculate the start time
+    DateTime startTime = now.subtract(Duration(minutes: now.minute % segments));
+
+    // Loop to generate the times
+    for (int i = 0; i < segments; i++) {
+      // Calculate the time for this segment
+      DateTime segmentTime =
+          startTime.subtract(Duration(minutes: i * (60 ~/ segments)));
+
+      // Convert to UTC
+      result.add(segmentTime.toUtc());
+    }
+
+    return result;
+  }
+//================================================================================================================================
+
+  List<DateTime> getLast24HoursDivided(int segments) {
+    List<DateTime> result = [];
+    DateTime now = DateTime.now();
+
+    // Calculate the start time (24 hours ago)
+    DateTime startTime = now.subtract(const Duration(hours: 24));
+
+    // Loop to generate the times
+    for (int i = 0; i < segments; i++) {
+      // Calculate the time for this segment
+      DateTime segmentTime =
+          startTime.add(Duration(minutes: (i * (24 * 60) ~/ segments)));
+
+      // Convert to UTC
+      result.add(segmentTime.toUtc());
+    }
+
+    return result;
+  }
+//================================================================================================================================
+
+  List<DateTime> getLastMonthDivided(int segments) {
+    List<DateTime> result = [];
+    DateTime now = DateTime.now();
+
+    // Calculate the start time (one month ago)
+    DateTime startTime = DateTime(
+        now.year, now.month - 1, now.day, now.hour, now.minute, now.second);
+
+    // Calculate the number of days in the previous month
+    int daysInPreviousMonth = DateTime(now.year, now.month, 0).day;
+
+    // Loop to generate the times
+    for (int i = 0; i < segments; i++) {
+      // Calculate the time for this segment
+      DateTime segmentTime =
+          startTime.add(Duration(days: (i * daysInPreviousMonth) ~/ segments));
+
+      // Convert to UTC
+      result.add(segmentTime.toUtc());
+    }
+
+    return result;
+  }
+
   //================================================================================================================================
-  Future<Map<String, dynamic>> fetchDashboardData(subAccounts) async {
-    Map<String, dynamic> dashboardMap = {};
-    List<String> localSubAccounts = [];
-    for (var subAccount in subAccounts) {
-      localSubAccounts.add(subAccount['name']);
+  List hashrateConverter(double hash, int thFix) {
+    double th = hash / 1e6;
+    if (th < 1000) {
+      return [th.toStringAsFixed(thFix), 'TH/s'];
     }
-    for (var subAccount in localSubAccounts) {
-      var dashboardData = await ApiClient.get(
-          'api/v1/pools/sub_account/summary/?sub_account_name=' + subAccount);
-
-      List<dynamic> hashrateData = await Future.wait([
-        _fetchHashrate(subAccount, '10MIN'),
-        _fetchHashrate(subAccount, 'HOUR'),
-        _fetchHashrate(subAccount, 'DAY'),
-      ]);
-
-      dashboardMap[subAccount] = {
-        'dashboardData': dashboardData,
-        'hashrateData': hashrateData,
-      };
+    if (th >= 1000) {
+      double ph = th / 1000;
+      return [ph.toStringAsFixed(2), 'PH/s'];
     }
-    await storeDataInHive(dashboardMap);
-    return dashboardMap;
-  }
-
-//================================================================================================================================
-  Future<dynamic> _fetchHashrate(String subAccount, String interval) async {
-    return await ApiClient.get(
-        'api/v1/pools/sub_account/observer/hashrate_chart/?interval=$interval&with_dates=true&sub_account_name=$subAccount');
-  }
-
-//================================================================================================================================
-  Future<Map<String, dynamic>> updateSubAccountData(
-      String subAccountName, Map<String, dynamic> dashboardMap) async {
-    var dashboardData = await ApiClient.get(
-        'api/v1/pools/sub_account/summary/?sub_account_name=$subAccountName');
-
-    List<dynamic> hashrateData = await Future.wait([
-      _fetchHashrate(subAccountName, '10MIN'),
-      _fetchHashrate(subAccountName, 'HOUR'),
-      _fetchHashrate(subAccountName, 'DAY'),
-    ]);
-
-    Map<String, dynamic> subAccountData = {
-      'dashboardData': dashboardData,
-      'hashrateData': hashrateData,
-    };
-    if (dashboardMap.containsKey(subAccountName)) {
-      dashboardMap[subAccountName] = subAccountData;
-    } else {
-      dashboardMap.putIfAbsent(subAccountName, () => subAccountData);
+    if (th >= 1000000) {
+      double eh = th / 1000000;
+      return [eh.toStringAsFixed(2), 'EH/s'];
     }
-    return dashboardMap;
+    double ph = th / 1000;
+    return [ph.toStringAsFixed(2), 'PH/s'];
   }
-  //================================================================================================================================
-
-  Future<void> storeDataInHive(Map<String, dynamic> dashboardMap) async {
-    final box = await Hive.openBox('dashboardBox');
-
-    await box.clear();
-
-    for (var entry in dashboardMap.entries) {
-      await box.put(entry.key, entry.value);
-    }
-  }
-
-//================================================================================================================================
-  Future<Map<String, dynamic>> getDataFromHive() async {
-    final box = await Hive.openBox('dashboardBox');
-
-    Map<String, dynamic> dashboardMap = {};
-    for (var key in box.keys) {
-      dashboardMap[key] = box.get(key);
-    }
-
-    return dashboardMap;
-  }
-//================================================================================================================================
 }

@@ -1,11 +1,14 @@
 import 'package:btcpool_app/app/screens/login/bloc/login_bloc.dart';
+import 'package:btcpool_app/app/screens/login/components/otp_verify_page.dart';
 import 'package:btcpool_app/app/screens/navigator/main_navigator.dart';
 import 'package:btcpool_app/app/screens/reset/reset_screen.dart';
+import 'package:btcpool_app/app/screens/signup/components/verify_code_page.dart';
 import 'package:btcpool_app/app/screens/signup/signup_screen.dart';
 import 'package:btcpool_app/app/widgets/buttons/custom_button.dart';
 import 'package:btcpool_app/app/widgets/custom_snackbar.dart';
 import 'package:btcpool_app/app/widgets/textfields/custom_textfiled.dart';
-import 'package:btcpool_app/data/const.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,16 +27,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
           child: SizedBox(
-            width: 120,
-            child: Image.asset(
-              'assets/images/btcpool_logo.png',
-            ),
-          ),
+              width: 120,
+              child: (Theme.of(context).brightness == Brightness.dark)
+                  ? Image.asset('assets/images/btcpool_logo.png')
+                  : Image.asset('assets/images/btcpool_logo.png')),
         ),
       ),
       body: BlocListener<LoginBloc, LoginState>(
@@ -46,10 +48,28 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is LoginError) {
             CustomSnackbar().showCustomSnackbar(context, state.message, false);
           }
+          if (state is LoginOtp) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => VerifyOTPPage(
+                        oathToken: state.oathToken,
+                      )),
+            );
+          }
+          if (state is LoginUnVerifiedEmail) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => VerifyCodePage(
+                        isSign: true,
+                        reVerify: true,
+                        email: state.email,
+                      )),
+            );
+          }
         },
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
                 if (state is LoginLoaded) {
@@ -57,32 +77,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 80,
                       ),
                       Center(
                         child: Text(
-                          'Log In',
-                          style: TextStyle(
+                          LocaleKeys.log_in.tr(),
+                          style: const TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
-                      Text('User Name'),
-                      SizedBox(
+                      Text(LocaleKeys.user_name.tr()),
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
-                        hintText: 'User Name',
+                        hintText: LocaleKeys.user_name.tr(),
                         controller: login,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text('Password'),
-                      SizedBox(
+                      Text(LocaleKeys.password.tr()),
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
@@ -114,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: fa,
                         isNumber: true,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                       CustomButton(
@@ -125,15 +145,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               password: password.text,
                               otp: fa.text));
                         },
-                        text: 'Sign In',
+                        text: LocaleKeys.sign_in.tr(),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Don’t have an account? '),
+                          Text(
+                            LocaleKeys.dont_have_account.tr() + ' ',
+                          ),
                           InkWell(
                             onTap: () {
                               Navigator.push(
@@ -143,8 +165,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             },
                             child: Text(
-                              'Sign Up',
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              LocaleKeys.sign_up.tr(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           )
                         ],
@@ -152,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Forgot password? '),
+                          Text(LocaleKeys.forgot_password.tr() + ' '),
                           InkWell(
                             onTap: () {
                               Navigator.push(
@@ -162,8 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             },
                             child: Text(
-                              'Reset',
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              LocaleKeys.reset.tr(),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           )
                         ],

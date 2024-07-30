@@ -12,4 +12,9 @@ final class ApiDelete extends ApiEvent {
   ApiDelete({required this.apiKey});
 }
 
-final class ApiSubAccountChange extends ApiEvent {}
+final class ApiSubAccountChange extends ApiEvent {
+  final int index;
+  ApiSubAccountChange({required this.index});
+}
+
+final class ApiSubAccountUpdate extends ApiEvent {}

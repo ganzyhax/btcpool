@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:btcpool_app/api/api.dart';
 import 'package:btcpool_app/api/api_utils.dart';
-import 'package:btcpool_app/app/screens/dashboard/functions/functions.dart';
+import 'package:btcpool_app/data/cache_data/cache_hive.dart';
+import 'package:btcpool_app/data/user_data/user.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 part 'dashboard_event.dart';
@@ -14,66 +19,128 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var dashboardData;
     var hashrates;
     var strumUrls;
-    var allData;
+
+    double btcPrice = 60000;
     int selectedInterval = 0;
     on<DashboardEvent>((event, emit) async {
-      void emitAllDataState() {
-        emit(DashboardLoaded(
+      void emitAllDataState({strumUrlss, hashratess, dashboardDatas}) {
+        if (UserData().dataSubAccounts[selectedSubAccount] != null) {
+          if (UserData().dashboardMap.containsKey(
+              UserData().dataSubAccounts[selectedSubAccount]['name'])) {
+            if (UserData().dashboardMap != null &&
+                UserData().dashboardMap[UserData()
+                        .dataSubAccounts[selectedSubAccount]['name']] !=
+                    null &&
+                UserData().dashboardMap[UserData().dataSubAccounts[selectedSubAccount]['name']]
+                        ['hashrateData'] !=
+                    null &&
+                UserData().dashboardMap[UserData().dataSubAccounts[selectedSubAccount]['name']]
+                        ['dashboardData'] !=
+                    null &&
+                UserData().dashboardMap[UserData().dataSubAccounts[selectedSubAccount]['name']]
+                        ['hashrateData'][selectedInterval] !=
+                    null &&
+                UserData().dashboardMap[UserData().dataSubAccounts[selectedSubAccount]['name']]
+                        ['hashrateData'][selectedInterval]['hashrates'] !=
+                    null) {
+              emit(DashboardLoaded(
+                  btcPrice: btcPrice,
+                  selectedInterval: selectedInterval,
+                  strumUrls: strumUrlss,
+                  dashboardData: UserData().dashboardMap[
+                      UserData().dataSubAccounts[selectedSubAccount]
+                          ['name']]['dashboardData'],
+                  subAccounts: UserData().dataSubAccounts,
+                  hashrates: UserData().dashboardMap[UserData()
+                          .dataSubAccounts[selectedSubAccount]['name']]
+                      ['hashrateData'][selectedInterval]['hashrates'],
+                  selectedSubAccout: selectedSubAccount));
+            } else {
+              emit(DashboardLoaded(
+                btcPrice: btcPrice,
+                selectedInterval: selectedInterval,
+                subAccounts: UserData().dataSubAccounts,
+                selectedSubAccout: selectedSubAccount,
+                strumUrls: strumUrlss,
+                hashrates: hashratess,
+                dashboardData: dashboardDatas,
+              ));
+            }
+          } else {
+            log('Dashboard NOT CACHE loaded ');
+            emit(DashboardLoaded(
+              btcPrice: btcPrice,
+              selectedInterval: selectedInterval,
+              subAccounts: UserData().dataSubAccounts,
+              selectedSubAccout: selectedSubAccount,
+              strumUrls: strumUrls,
+              hashrates: hashratess,
+              dashboardData: dashboardDatas,
+            ));
+          }
+        } else {
+          log('Dashboard NOT CACHE loaded ');
+          emit(DashboardLoaded(
+            btcPrice: btcPrice,
             selectedInterval: selectedInterval,
+            subAccounts: UserData().dataSubAccounts,
+            selectedSubAccout: selectedSubAccount,
             strumUrls: strumUrls,
-            dashboardData: allData[data[selectedSubAccount]['name']]
-                ['dashboardData']['data'],
-            subAccounts: data,
-            hashrates: allData[data[selectedSubAccount]['name']]['hashrateData']
-                [selectedInterval]['hashrates'],
-            selectedSubAccout: selectedSubAccount));
+            hashrates: hashratess,
+            dashboardData: dashboardDatas,
+          ));
+        }
       }
 
+      if (event is DashboardSubAccountCreateShowModal) {
+        emit(DashboardShowingSubAccountModal());
+      }
       if (event is DashboardLoad) {
+        log("DashboardBloc Load started...");
+        btcPrice = await ApiClient().fetchBTCPrice();
+        await UserData().setLocalDashboardData();
+        await UserData().setLocalSubaccountsData();
         data = await ApiClient.get('api/v1/pools/sub_account/all/');
-        selectedSubAccount = await AuthUtils.getIndexSubAccount();
-        if (data[selectedSubAccount] == null) {
-          selectedSubAccount = 0;
+
+        if (data != null) {
+          if (data.length == 0) {
+            emit(DashboardCreateSubAccountModal());
+          } else {
+            await LocalCache().storeSubAccountsDataInHive(data);
+            try {
+              selectedSubAccount = await AuthUtils.getIndexSubAccount();
+              if (UserData().dataSubAccounts[selectedSubAccount] == null) {
+                selectedSubAccount = 0;
+              }
+              emitAllDataState(
+                  strumUrlss: null, hashratess: null, dashboardDatas: null);
+              strumUrls ??= await ApiClient.get(
+                  'api/v1/pools/sub_account/stratum_url/?sub_account_name=' +
+                      UserData().dataSubAccounts[selectedSubAccount]['name']);
+              emitAllDataState(
+                  strumUrlss: strumUrls,
+                  hashratess: null,
+                  dashboardDatas: null);
+
+              await UserData().updateSubAccountData(
+                  UserData().dataSubAccounts[selectedSubAccount]['name']);
+
+              emitAllDataState(
+                  strumUrlss: strumUrls,
+                  hashratess: hashrates,
+                  dashboardDatas: dashboardData);
+              await UserData().fetchDashboardData(data);
+            } catch (e) {
+              emit(DashboardInternetException());
+              emitAllDataState();
+            }
+          }
+        } else {
+          emit(DashboardInternetException());
+          emitAllDataState();
         }
-        emit(DashboardLoaded(
-          selectedInterval: selectedInterval,
-          subAccounts: data,
-          selectedSubAccout: selectedSubAccount,
-          strumUrls: null,
-          hashrates: null,
-          dashboardData: null,
-        ));
-
-        if (strumUrls == null) {
-          strumUrls = await ApiClient.get(
-              'api/v1/pools/sub_account/stratum_url/?sub_account_name=' +
-                  data[selectedSubAccount]['name']);
-        }
-
-        emit(DashboardLoaded(
-          selectedInterval: selectedInterval,
-          subAccounts: data,
-          selectedSubAccout: selectedSubAccount,
-          strumUrls: strumUrls,
-          hashrates: null,
-          dashboardData: null,
-        ));
-        dashboardData = await ApiClient.get(
-            'api/v1/pools/sub_account/summary/?sub_account_name=' +
-                data[selectedSubAccount]['name']);
-        hashrates = await ApiClient.get(
-            'api/v1/pools/sub_account/observer/hashrate_chart/?interval=10MIN&with_dates=true&sub_account_name=' +
-                data[selectedSubAccount]['name']);
-
-        emit(DashboardLoaded(
-            selectedInterval: selectedInterval,
-            strumUrls: strumUrls,
-            hashrates: hashrates['hashrates'],
-            dashboardData: dashboardData['data'],
-            subAccounts: data,
-            selectedSubAccout: selectedSubAccount));
-        allData = await DashboardFunctions().fetchDashboardData(data);
       }
+
       if (event is DashboardChooseInterval) {
         selectedInterval = event.index;
         String interval = '10MIN';
@@ -84,109 +151,172 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         } else {
           interval = 'DAY';
         }
-        if (allData == null) {
-          emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: dashboardData['data'],
-              subAccounts: data,
-              hashrates: null,
-              selectedSubAccout: selectedSubAccount));
-          hashrates = await ApiClient.get(
-              'api/v1/pools/sub_account/observer/hashrate_chart/?interval=' +
-                  interval +
-                  '&with_dates=true&sub_account_name=' +
-                  data[selectedSubAccount]['name']);
-          emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: dashboardData['data'],
-              subAccounts: data,
-              hashrates: hashrates['hashrates'],
-              selectedSubAccout: selectedSubAccount));
+        if (!UserData().dashboardMap.containsKey(
+            UserData().dataSubAccounts[selectedSubAccount]['name'])) {
+          emitAllDataState(
+              hashratess: null,
+              strumUrlss: strumUrls,
+              dashboardDatas: dashboardData);
+          try {
+            hashrates = await ApiClient.get(
+                'api/v1/pools/sub_account/observer/hashrate_chart/?interval=$interval&sub_account_name=' +
+                    UserData().dataSubAccounts[selectedSubAccount]['name']);
+            await UserData().setSingleHashrateData(
+                UserData().dataSubAccounts[selectedSubAccount]['name'],
+                hashrates,
+                selectedInterval);
+            emitAllDataState(
+                hashratess: hashrates['hashrates'],
+                dashboardDatas: dashboardData,
+                strumUrlss: strumUrls);
+          } catch (e) {
+            emitAllDataState();
+          }
         } else {
-          emitAllDataState();
+          emitAllDataState(
+            hashratess: hashrates,
+            strumUrlss: strumUrls,
+            dashboardDatas: dashboardData,
+          );
         }
       }
       if (event is DashboardChooseSubAccount) {
         selectedSubAccount = event.index;
         await AuthUtils.setIndexSubAccount(selectedSubAccount);
         selectedInterval = 0;
-        if (allData == null) {
-          emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: null,
-              subAccounts: data,
-              hashrates: null,
-              selectedSubAccout: selectedSubAccount));
-          dashboardData = await ApiClient.get(
-              'api/v1/pools/sub_account/summary/?sub_account_name=' +
-                  data[selectedSubAccount]['name']);
-          hashrates = await ApiClient.get(
-              'api/v1/pools/sub_account/observer/hashrate_chart/?interval=' +
-                  '10MIN' +
-                  '&with_dates=true&sub_account_name=' +
-                  data[selectedSubAccount]['name']);
+        if (!UserData().dashboardMap.containsKey(
+            UserData().dataSubAccounts[selectedSubAccount]['name'])) {
+          emitAllDataState(strumUrlss: strumUrls);
+          try {
+            dashboardData = await ApiClient.get(
+                'api/v1/pools/sub_account/summary/?sub_account_name=' +
+                    UserData().dataSubAccounts[selectedSubAccount]['name']);
+            hashrates = await ApiClient.get(
+                'api/v1/pools/sub_account/observer/hashrate_chart/?interval=1HOUR&with_dates=true&sub_account_name=' +
+                    UserData().dataSubAccounts[selectedSubAccount]['name']);
+            await UserData().setDashboardData(
+              UserData().dataSubAccounts[selectedSubAccount]['name'],
+              dashboardData,
+            );
 
-          emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: dashboardData['data'],
-              subAccounts: data,
-              hashrates: hashrates['hashrates'],
-              selectedSubAccout: selectedSubAccount));
+            await UserData().setSingleHashrateData(
+                UserData().dataSubAccounts[selectedSubAccount]['name'],
+                hashrates,
+                0);
+            emitAllDataState(
+                strumUrlss: strumUrls,
+                hashratess: hashrates['hashrates'],
+                dashboardDatas: dashboardData);
+          } catch (e) {
+            emitAllDataState(
+              strumUrlss: strumUrls,
+            );
+          }
         } else {
-          emitAllDataState();
-          allData = await DashboardFunctions()
-              .updateSubAccountData(data[selectedSubAccount]['name'], allData);
-          emitAllDataState();
+          emitAllDataState(
+            dashboardDatas: dashboardData,
+            strumUrlss: strumUrls,
+            hashratess: hashrates,
+          );
+          try {
+            await UserData().updateSubAccountData(
+                UserData().dataSubAccounts[selectedSubAccount]['name']);
+            emitAllDataState(
+              dashboardDatas: dashboardData,
+              strumUrlss: strumUrls,
+              hashratess: hashrates,
+            );
+          } catch (e) {}
         }
       }
       if (event is DashboardLoadCache) {
         selectedInterval = 0;
-        if (allData == null) {
+        try {
+          if (!UserData().dashboardMap.containsKey(
+              UserData().dataSubAccounts[selectedSubAccount]['name'])) {
+            emitAllDataState(
+                hashratess: (hashrates == null) ? null : hashrates['hashrates'],
+                dashboardDatas: dashboardData,
+                strumUrlss: strumUrls);
+
+            data = await ApiClient.get('api/v1/pools/sub_account/all/');
+            await LocalCache().storeSubAccountsDataInHive(data);
+            hashrates = await ApiClient.get(
+                'api/v1/pools/sub_account/observer/hashrate_chart/?interval=1HOUR&with_dates=true&sub_account_name=' +
+                    UserData().dataSubAccounts[selectedSubAccount]['name']);
+
+            dashboardData = await ApiClient.get(
+                'api/v1/pools/sub_account/summary/?sub_account_name=' +
+                    UserData().dataSubAccounts[selectedSubAccount]['name']);
+
+            emitAllDataState(
+                hashratess: hashrates['hashrates'],
+                dashboardDatas: dashboardData,
+                strumUrlss: strumUrls);
+          } else {
+            emitAllDataState(
+                hashratess: hashrates,
+                dashboardDatas: dashboardData,
+                strumUrlss: strumUrls);
+            await UserData().updateSubAccountData(
+                UserData().dataSubAccounts[selectedSubAccount]['name']);
+            emitAllDataState(
+                hashratess: hashrates,
+                dashboardDatas: dashboardData,
+                strumUrlss: strumUrls);
+          }
+        } catch (e) {
+          emit(DashboardInternetException());
           emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: dashboardData['data'],
-              subAccounts: data,
-              hashrates: hashrates['hashrates'],
-              selectedSubAccout: selectedSubAccount));
-          data = await ApiClient.get('api/v1/pools/sub_account/all/');
-          hashrates = await ApiClient.get(
-              'api/v1/pools/sub_account/observer/hashrate_chart/?interval=10MIN&with_dates=true&sub_account_name=' +
-                  data[selectedSubAccount]['name']);
-          dashboardData = await ApiClient.get(
-              'api/v1/pools/sub_account/summary/?sub_account_name=' +
-                  data[selectedSubAccount]['name']);
-          emit(DashboardLoaded(
-              selectedInterval: selectedInterval,
-              strumUrls: strumUrls,
-              dashboardData: dashboardData['data'],
-              subAccounts: data,
-              hashrates: hashrates['hashrates'],
-              selectedSubAccout: selectedSubAccount));
-        } else {
-          emitAllDataState();
-          allData = await DashboardFunctions()
-              .updateSubAccountData(data[selectedSubAccount]['name'], allData);
-          emitAllDataState();
+            btcPrice: btcPrice,
+            selectedInterval: selectedInterval,
+            subAccounts: null,
+            selectedSubAccout: selectedSubAccount,
+            strumUrls: null,
+            hashrates: null,
+            dashboardData: null,
+          ));
         }
       }
       if (event is DashboardUpdateSubaccounts) {
+        log("DashboardUpdateSubaccounts Load started...");
         data = await ApiClient.get('api/v1/pools/sub_account/all/');
+        await LocalCache().storeSubAccountsDataInHive(data);
         selectedSubAccount = await AuthUtils.getIndexSubAccount();
-        if (data[selectedSubAccount] == null) {
+        if (UserData().dataSubAccounts[selectedSubAccount] == null) {
           selectedSubAccount = 0;
         }
-        emit(DashboardLoaded(
-            selectedInterval: selectedInterval,
-            strumUrls: strumUrls,
-            dashboardData: dashboardData['data'],
-            subAccounts: data,
-            hashrates: hashrates['hashrates'],
-            selectedSubAccout: selectedSubAccount));
+        strumUrls ??= await ApiClient.get(
+            'api/v1/pools/sub_account/stratum_url/?sub_account_name=' +
+                UserData().dataSubAccounts[selectedSubAccount]['name']);
+        await UserData().addSubAccountData(event.subAccount);
+        emitAllDataState(
+            hashratess: hashrates,
+            dashboardDatas: dashboardData,
+            strumUrlss: strumUrls);
+      }
+      if (event is DashboardRefresh) {
+        try {
+          selectedSubAccount = await AuthUtils.getIndexSubAccount();
+
+          bool isUpdated = await UserData().updateSubAccountData(
+              UserData().dataSubAccounts[selectedSubAccount]['name']);
+          if (isUpdated) {
+            emitAllDataState(
+                dashboardDatas: dashboardData,
+                hashratess: hashrates,
+                strumUrlss: strumUrls);
+          }
+        } catch (e) {
+          emit(DashboardInternetException());
+          emitAllDataState(
+              dashboardDatas: dashboardData,
+              hashratess: hashrates,
+              strumUrlss: strumUrls);
+        }
+      }
+      if (event is DashboardShowEvent) {
+        emit(DashboardShowUpdate(withSkip: false));
       }
     });
   }

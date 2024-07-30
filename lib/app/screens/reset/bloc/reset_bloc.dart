@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:btcpool_app/api/api_utils.dart';
 import 'package:meta/meta.dart';
 
@@ -13,29 +12,48 @@ class ResetBloc extends Bloc<ResetEvent, ResetState> {
     String email = '';
     on<ResetEvent>((event, emit) async {
       if (event is ResetSendCode) {
-        bool isSuccess = await AuthUtils.reset(event.email);
-        if (isSuccess) {
-          emit(ResetSendSuccess(email: event.email));
-          emit(ResetLoaded());
+        try {
+          var data = await AuthUtils.reset(event.email);
+          if (data == true) {
+            emit(ResetSendSuccess(email: event.email));
+          } else if (data.containsKey('title')) {
+            emit(ResetError(message: data['message']));
+            emit(ResetLoaded());
+          }
+        } catch (e) {
+          print(e);
+          emit(ResetError(message: 'No internet connection...'));
         }
+
+        emit(ResetLoaded());
       }
       if (event is ResetConfirm) {
-        email = event.email;
-        var data = await AuthUtils.resetConfirmCode(event.email, event.code);
-        if (data.containsKey('title')) {
-          emit(ResetError(message: data['message']));
-          emit(ResetLoaded());
-        } else {
-          resetToken = data['reset_token'];
-          emit(ResetResetPassword());
-          emit(ResetLoaded());
+        try {
+          email = event.email;
+          var data = await AuthUtils.resetConfirmCode(event.email, event.code);
+          if (data.containsKey('title')) {
+            emit(ResetError(message: data['message']));
+          } else {
+            resetToken = data['reset_token'];
+            emit(ResetResetPassword());
+          }
+        } catch (e) {
+          emit(ResetError(message: 'No internet connection...'));
         }
+        emit(ResetLoaded());
       }
       if (event is ResetSetPassword) {
-        var data =
-            await AuthUtils.resetSetPassword(email, event.password, resetToken);
-        print(data);
-        emit(ResetSuccess());
+        try {
+          var data = await AuthUtils.resetSetPassword(
+              email, event.password, resetToken);
+          if (data == true) {
+            emit(ResetSuccess());
+          } else {
+            emit(ResetError(message: 'No internet connection...'));
+          }
+        } catch (e) {
+          emit(ResetError(message: 'No internet connection...'));
+        }
         emit(ResetLoaded());
       }
     });

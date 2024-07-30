@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:btcpool_app/app/screens/revenue/components/revenue_payouts_info_card.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 
 class RevenuePayoutsCard extends StatelessWidget {
   final data;
@@ -10,9 +11,11 @@ class RevenuePayoutsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Locale currentLocale = context.locale;
+
     DateTime dateTime = DateTime.parse(data['paid_date'].toString());
-    String date = DateFormat('MMM d, yyyy, HH:mm').format(dateTime);
+    String date = DateFormat('MMM d, yyyy, HH:mm', currentLocale.toString())
+        .format(dateTime);
 
     return InkWell(
       onTap: () {
@@ -25,14 +28,14 @@ class RevenuePayoutsCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(14),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColors().kPrimaryWhite),
+            color: Theme.of(context).colorScheme.secondary),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: Column(
                 children: [
@@ -40,13 +43,13 @@ class RevenuePayoutsCard extends StatelessWidget {
                     children: [
                       Text(
                         date,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 13,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -56,12 +59,13 @@ class RevenuePayoutsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Amount',
+                            LocaleKeys.amount.tr(),
                             style: TextStyle(
                                 fontSize: 12, color: AppColors().kPrimaryGrey),
                           ),
-                          Text(data['amount'].toString() + ' BTC',
-                              style: TextStyle(
+                          Text(
+                              '${double.parse(data['amount'].toString()).toStringAsFixed(8)} BTC',
+                              style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w700,
                               ))
@@ -80,7 +84,7 @@ class RevenuePayoutsCard extends StatelessWidget {
                             child: Text(data['tx_id'],
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                 )),
@@ -91,7 +95,7 @@ class RevenuePayoutsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Wallet',
+                            LocaleKeys.wallet.tr(),
                             style: TextStyle(
                                 fontSize: 12, color: AppColors().kPrimaryGrey),
                           ),
@@ -100,7 +104,7 @@ class RevenuePayoutsCard extends StatelessWidget {
                             child: Text(data['address'].toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                 )),
@@ -112,7 +116,7 @@ class RevenuePayoutsCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 12,
               child: Icon(
                 Icons.arrow_forward_ios_outlined,

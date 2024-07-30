@@ -11,3 +11,9 @@ class LoginLog extends LoginEvent {
   String otp;
   LoginLog({required this.login, required this.password, required this.otp});
 }
+
+class LoginLogWithOtp extends LoginEvent {
+  String oathToken;
+  String otp;
+  LoginLogWithOtp({required this.oathToken, required this.otp});
+}

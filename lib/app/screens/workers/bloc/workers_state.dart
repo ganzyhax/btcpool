@@ -7,5 +7,8 @@ final class WorkersInitial extends WorkersState {}
 
 final class WorkersLoaded extends WorkersState {
   int selectedTab = 0;
-  WorkersLoaded({required this.selectedTab});
+  final tabs;
+  bool isLoading;
+  WorkersLoaded(
+      {required this.selectedTab, required this.tabs, required this.isLoading});
 }

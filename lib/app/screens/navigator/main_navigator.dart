@@ -1,13 +1,14 @@
 import 'package:btcpool_app/app/screens/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/screens/navigator/bloc/main_navigator_bloc.dart';
 import 'package:btcpool_app/app/screens/navigator/components/navigator_item.dart';
-import 'package:btcpool_app/data/const.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomNavigationBar extends StatelessWidget {
-  CustomNavigationBar({super.key});
+  const CustomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class CustomNavigationBar extends StatelessWidget {
         if (state is MainNavigatorLoaded) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: AppColors().kPrimaryBackgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.background,
             body: Column(
               children: [
                 Expanded(child: state.screens[state.index]),
@@ -24,7 +25,7 @@ class CustomNavigationBar extends StatelessWidget {
                   height: 80,
                   width: double.maxFinite,
                   decoration: BoxDecoration(
-                    color: AppColors().kPrimaryWhite,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -34,12 +35,12 @@ class CustomNavigationBar extends StatelessWidget {
                           BlocProvider.of<MainNavigatorBloc>(context)
                               .add(MainNavigatorChangePage(index: 0));
                           BlocProvider.of<DashboardBloc>(context)
-                            ..add(DashboardLoadCache());
+                              .add(DashboardLoadCache());
                         },
                         child: NavigationItem(
                             assetImage: 'assets/icons/dashboard.svg',
                             isSelected: (state.index == 0) ? true : false,
-                            text: 'Dashboard'),
+                            text: LocaleKeys.dashboard.tr()),
                       ),
                       InkWell(
                         onTap: () {
@@ -47,9 +48,9 @@ class CustomNavigationBar extends StatelessWidget {
                               .add(MainNavigatorChangePage(index: 1));
                         },
                         child: NavigationItem(
-                            assetImage: 'assets/icons/workers.svg',
-                            isSelected: (state.index == 1) ? true : false,
-                            text: 'Workers'),
+                            assetImage: 'assets/icons/payment.svg',
+                            isSelected: (state.index == 2) ? true : false,
+                            text: LocaleKeys.revenue.tr()),
                       ),
                       InkWell(
                         onTap: () {
@@ -57,19 +58,9 @@ class CustomNavigationBar extends StatelessWidget {
                               .add(MainNavigatorChangePage(index: 2));
                         },
                         child: NavigationItem(
-                            assetImage: 'assets/icons/payment.svg',
-                            isSelected: (state.index == 2) ? true : false,
-                            text: 'Revenue'),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          BlocProvider.of<MainNavigatorBloc>(context)
-                              .add(MainNavigatorChangePage(index: 3));
-                        },
-                        child: NavigationItem(
                             assetImage: 'assets/icons/settings.svg',
                             isSelected: (state.index == 3) ? true : false,
-                            text: 'Settings'),
+                            text: LocaleKeys.settings.tr()),
                       ),
                     ],
                   ),

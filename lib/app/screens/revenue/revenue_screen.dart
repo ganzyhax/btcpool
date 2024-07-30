@@ -3,8 +3,10 @@ import 'package:btcpool_app/app/screens/revenue/components/revenue_earnings.dart
 import 'package:btcpool_app/app/screens/revenue/components/revenue_payouts.dart';
 import 'package:btcpool_app/app/widgets/appbar/custom_appbar.dart';
 import 'package:btcpool_app/data/const.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 
 class RevenueScreen extends StatelessWidget {
   const RevenueScreen({super.key});
@@ -12,19 +14,20 @@ class RevenueScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors().kPrimaryBackgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(60),
+            preferredSize: const Size.fromHeight(60),
             child: CustomAppBar(
-              title: 'Revenue',
+              title: LocaleKeys.revenue,
             )),
         body: DefaultTabController(
             length: 2,
             child: Scaffold(
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).colorScheme.background,
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
+                preferredSize: const Size.fromHeight(kToolbarHeight),
                 child: Container(
+                  color: Theme.of(context).colorScheme.secondary,
                   height: 50.0,
                   child: TabBar(
                     indicatorColor: AppColors().kPrimaryGreen,
@@ -32,10 +35,10 @@ class RevenueScreen extends StatelessWidget {
                     labelColor: AppColors().kPrimaryGreen,
                     tabs: [
                       Tab(
-                        text: "Earnings",
+                        text: LocaleKeys.earnings.tr(),
                       ),
                       Tab(
-                        text: "Payouts",
+                        text: LocaleKeys.payouts.tr(),
                       ),
                     ],
                   ),

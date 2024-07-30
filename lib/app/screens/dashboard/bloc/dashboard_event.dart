@@ -19,4 +19,15 @@ class DashboardChooseInterval extends DashboardEvent {
 
 class DashboardLoadCache extends DashboardEvent {}
 
-class DashboardUpdateSubaccounts extends DashboardEvent {}
+class DashboardUpdateSubaccounts extends DashboardEvent {
+  String subAccount;
+  DashboardUpdateSubaccounts({required this.subAccount});
+}
+
+class DashboardSubAccountCreateShowModal extends DashboardEvent {}
+
+class DashboardClear extends DashboardEvent {}
+
+class DashboardRefresh extends DashboardEvent {}
+
+class DashboardShowEvent extends DashboardEvent {}

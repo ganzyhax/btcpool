@@ -1,26 +1,32 @@
+import 'package:btcpool_app/app/bloc/theme_bloc.dart';
 import 'package:btcpool_app/app/screens/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/screens/login/bloc/login_bloc.dart';
-import 'package:btcpool_app/app/screens/login/login_screen.dart';
 import 'package:btcpool_app/app/screens/navigator/bloc/main_navigator_bloc.dart';
-import 'package:btcpool_app/app/screens/navigator/main_navigator.dart';
 import 'package:btcpool_app/app/screens/reset/bloc/reset_bloc.dart';
 import 'package:btcpool_app/app/screens/revenue/bloc/revenue_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/api/bloc/api_bloc.dart';
+import 'package:btcpool_app/app/screens/settings/pages/calculator/bloc/calculator_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/fa/bloc/fa_bloc.dart';
+import 'package:btcpool_app/app/screens/settings/pages/language/bloc/language_bloc.dart';
+import 'package:btcpool_app/app/screens/settings/pages/notification/bloc/notification_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/observer/bloc/observer_bloc.dart';
+import 'package:btcpool_app/app/screens/settings/pages/referral/bloc/referral_bloc.dart';
+import 'package:btcpool_app/app/screens/settings/pages/security/bloc/security_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/subaccount/bloc/subaccount_bloc.dart';
 import 'package:btcpool_app/app/screens/signup/bloc/signup_bloc.dart';
+import 'package:btcpool_app/app/screens/splash/splash_screen.dart';
 import 'package:btcpool_app/app/screens/workers/bloc/workers_bloc.dart';
-import 'package:btcpool_app/data/const.dart';
+import 'package:btcpool_app/theme/theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BTCPool extends StatelessWidget {
-  final bool isLogged;
-  const BTCPool({super.key, required this.isLogged});
+  const BTCPool({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // final dashboardBloc = GetIt.instance<DashboardBloc>();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -56,19 +62,50 @@ class BTCPool extends StatelessWidget {
         BlocProvider(
           create: (context) => ObserverBloc()..add(ObserverLoad()),
         ),
+        BlocProvider(
+          create: (context) => CalculatorBloc()..add(CalculatorLoad()),
+        ),
+        BlocProvider(
+          create: (context) => LanguageBloc()..add(LanguageLoad()),
+        ),
+        BlocProvider(
+          create: (context) => SecurityBloc()..add(SecurityLoad()),
+        ),
+        BlocProvider(
+          create: (context) => ReferralBloc()..add(ReferralLoad()),
+        ),
+        BlocProvider(
+          create: (context) => NotificationBloc()..add(NotificationLoad()),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'EnegixApp',
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-            useMaterial3: true,
-            primaryColor: AppColors().kPrimaryGreen
-            // textTheme: GoogleFonts.mulishTextTheme(),
-            ),
-        home: MediaQuery(
-          child: (isLogged) ? CustomNavigationBar() : LoginScreen(),
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+      child: BlocProvider(
+        create: (context) => ThemeBloc(context),
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            if (state is ThemeLoaded) {
+              return MaterialApp(
+                builder: (BuildContext context, Widget? child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(
+                      textScaleFactor: 1.0,
+                    ),
+                    child: child!,
+                  );
+                },
+                darkTheme: darkMode,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                debugShowCheckedModeBanner: false,
+                title: 'BTC Pool',
+                themeMode:
+                    (state.isDark == true) ? ThemeMode.dark : ThemeMode.light,
+                theme: lightMode,
+                home: SplashScreen(),
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );

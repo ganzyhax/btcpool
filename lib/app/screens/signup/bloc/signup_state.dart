@@ -6,9 +6,14 @@ sealed class SignupState {}
 final class SignupInitial extends SignupState {}
 
 final class SignupLoaded extends SignupState {
+  final countries;
   final String findedBin;
   final bool isLoading;
-  SignupLoaded({required this.findedBin, required this.isLoading});
+
+  SignupLoaded(
+      {required this.findedBin,
+      required this.isLoading,
+      required this.countries});
 }
 
 final class SignupLoading extends SignupState {}

@@ -1,12 +1,14 @@
-import 'dart:convert';
-
 import 'package:btcpool_app/app/screens/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/screens/navigator/bloc/main_navigator_bloc.dart';
 import 'package:btcpool_app/app/screens/revenue/bloc/revenue_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/api/bloc/api_bloc.dart';
 import 'package:btcpool_app/app/screens/settings/pages/subaccount/subaccount_page.dart';
+import 'package:btcpool_app/app/screens/workers/bloc/workers_bloc.dart';
 import 'package:btcpool_app/app/widgets/subaccount_item.dart';
 import 'package:btcpool_app/data/const.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +21,7 @@ class SubAccountCard extends StatelessWidget {
       onTap: () {
         showModalBottomSheet(
           context: context,
+          backgroundColor: Theme.of(context).colorScheme.background,
           builder: (context) {
             return Padding(
               padding: const EdgeInsets.all(25.0),
@@ -27,9 +30,9 @@ class SubAccountCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(),
+                      const SizedBox(),
                       Text(
-                        'Subaccount',
+                        LocaleKeys.subaccounts.tr(),
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w600),
                       ),
@@ -37,7 +40,7 @@ class SubAccountCard extends StatelessWidget {
                         onTap: () {
                           Navigator.pop(context);
                           BlocProvider.of<MainNavigatorBloc>(context)
-                            ..add(MainNavigatorChangePage(index: 3));
+                              .add(MainNavigatorChangePage(index: 3));
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -48,7 +51,7 @@ class SubAccountCard extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: AppColors().kPrimaryGreen,
                               borderRadius: BorderRadius.circular(5)),
-                          child: Center(
+                          child: const Center(
                             child: Icon(
                               Icons.add,
                               color: Colors.white,
@@ -58,33 +61,44 @@ class SubAccountCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
-                  BlocBuilder<DashboardBloc, DashboardState>(
-                    builder: (context, state) {
-                      if (state is DashboardLoaded) {
-                        return Column(
-                          children: state.subAccounts.map<Widget>((e) {
-                            int index = state.subAccounts.indexOf(e);
-                            return InkWell(
-                                onTap: () {
-                                  BlocProvider.of<DashboardBloc>(context)
-                                    ..add(DashboardChooseSubAccount(
-                                        index: index));
-                                  BlocProvider.of<RevenueBloc>(context)
-                                    ..add(RevenueSubAccountIndexChange(
-                                        index: index));
-                                  BlocProvider.of<ApiBloc>(context)
-                                    ..add(ApiSubAccountChange());
-                                  Navigator.pop(context);
-                                },
-                                child: SubAccountItem(title: e['name']));
-                          }).toList(),
-                        );
-                      }
-                      return Container();
-                    },
+                  Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: SingleChildScrollView(
+                      child: BlocBuilder<DashboardBloc, DashboardState>(
+                        builder: (context, state) {
+                          if (state is DashboardLoaded) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 15.0),
+                              child: Column(
+                                children: state.subAccounts.map<Widget>((e) {
+                                  int index = state.subAccounts.indexOf(e);
+                                  return InkWell(
+                                      onTap: () {
+                                        BlocProvider.of<DashboardBloc>(context)
+                                            .add(DashboardChooseSubAccount(
+                                                index: index));
+                                        BlocProvider.of<WorkersBloc>(context)
+                                            .add(WorkersSubAccountIndexChange(
+                                                index: index));
+                                        BlocProvider.of<RevenueBloc>(context)
+                                            .add(RevenueSubAccountIndexChange(
+                                                index: index));
+                                        BlocProvider.of<ApiBloc>(context).add(
+                                            ApiSubAccountChange(index: index));
+                                        Navigator.pop(context);
+                                      },
+                                      child: SubAccountItem(title: e['name']));
+                                }).toList(),
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -93,7 +107,7 @@ class SubAccountCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: AppColors().kPrimaryGreen),
@@ -102,11 +116,14 @@ class SubAccountCard extends StatelessWidget {
             BlocBuilder<DashboardBloc, DashboardState>(
               builder: (context, state) {
                 if (state is DashboardLoaded) {
-                  return Text(
-                    state.subAccounts[state.selectedSubAccout]['name']
-                        .toString(),
-                    style: TextStyle(fontSize: 14, color: Colors.white),
-                  );
+                  return (state.subAccounts != null)
+                      ? Text(
+                          state.subAccounts[state.selectedSubAccout]['name']
+                              .toString(),
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.white),
+                        )
+                      : Text('');
                 }
                 // if (state is DashboardLoadingSubAccount) {
                 //   return Text(
@@ -118,7 +135,7 @@ class SubAccountCard extends StatelessWidget {
                 return Container();
               },
             ),
-            Icon(
+            const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: Colors.white,
             )

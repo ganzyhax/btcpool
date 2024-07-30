@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,26 +7,33 @@ class RevenueFunctions {
   Future<List> selectDateRange(BuildContext context) async {
     DateTimeRange? newDateRange = await showDateRangePicker(
       context: context,
-      firstDate: DateTime(2020),
+      firstDate: DateTime(2015),
       lastDate: DateTime(2030),
       initialDateRange: DateTimeRange(
         start: DateTime.now(),
-        end: DateTime.now().add(Duration(days: 7)),
+        end: DateTime.now().add(const Duration(days: 7)),
       ),
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors().kPrimaryGreen, // Theme color for the picker
-            ),
-          ),
+          data: (Theme.of(context).colorScheme.brightness == Brightness.dark)
+              ? ThemeData.dark().copyWith(
+                  colorScheme: ColorScheme.dark(
+                    primary:
+                        AppColors().kPrimaryGreen, // Theme color for the picker
+                  ),
+                )
+              : ThemeData.light().copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary:
+                        AppColors().kPrimaryGreen, // Theme color for the picker
+                  ),
+                ),
           child: child!,
         );
       },
     );
 
     if (newDateRange != null) {
-      print("Range selected: ${newDateRange.start} to ${newDateRange.end}");
       return [newDateRange.start, newDateRange.end];
     } else {
       String todayDate = getTodayDateFormatted();
@@ -51,9 +59,17 @@ class RevenueFunctions {
   String getTodayDateFormatted() {
     DateTime now = DateTime.now();
 
-    // Создаем объект DateFormat для требуемого формата даты
+    DateFormat formatter = DateFormat(
+      'dd MMM, yyyy',
+    );
+    String formattedDate = formatter.format(now);
+    return formattedDate;
+  }
+
+  String getFormattedDateMinusTenDays() {
+    DateTime now = DateTime.now().subtract(const Duration(days: 10));
+
     DateFormat formatter = DateFormat('dd MMM, yyyy');
-    // Форматируем дату с использованием DateFormat
     String formattedDate = formatter.format(now);
     return formattedDate;
   }
@@ -64,13 +80,10 @@ class RevenueFunctions {
     for (var i = 0; i < 2; i++) {
       String inputDate = data[i];
 
-      // Парсинг строки в формат даты
       DateTime date = DateFormat('dd MMM, yyyy').parse(inputDate);
 
-      // Форматирование даты в требуемый формат
       String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
-      print(formattedDate);
       res.add(formattedDate);
     }
     return res;

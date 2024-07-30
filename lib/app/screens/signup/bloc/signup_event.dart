@@ -27,10 +27,17 @@ class SignupFindBin extends SignupEvent {
 class SignupVerify extends SignupEvent {
   final String value;
   final String email;
-  SignupVerify({required this.value, required this.email});
+  final bool isReVerify;
+  SignupVerify(
+      {required this.value, required this.email, required this.isReVerify});
 }
 
 class SignupSendCode extends SignupEvent {
   String email;
   SignupSendCode({required this.email});
+}
+
+class SignupSetCountryCode extends SignupEvent {
+  int countryId;
+  SignupSetCountryCode({required this.countryId});
 }

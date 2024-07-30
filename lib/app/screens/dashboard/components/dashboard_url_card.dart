@@ -1,25 +1,32 @@
+import 'package:btcpool_app/app/widgets/custom_snackbar.dart';
 import 'package:btcpool_app/data/const.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DashboardUrlCard extends StatelessWidget {
   final data;
-  const DashboardUrlCard({super.key, required this.data});
+  final String workerName;
+
+  const DashboardUrlCard(
+      {super.key, required this.data, required this.workerName});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: AppColors().kPrimaryWhite),
+          color: Theme.of(context).colorScheme.secondary),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'The worker name (after the dot) can be arbitrary, must consist of numbers or lowercase letters, and the maximum length is 30 characters.',
+            LocaleKeys.url_card_title,
             style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13),
-          ),
-          SizedBox(
+          ).tr(),
+          const SizedBox(
             height: 15,
           ),
           Column(
@@ -28,13 +35,13 @@ class DashboardUrlCard extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(e['description'],
                       style: TextStyle(
                           color: AppColors().kPrimaryGrey, fontSize: 13)),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
@@ -42,7 +49,8 @@ class DashboardUrlCard extends StatelessWidget {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width / 1.5,
-                        padding: EdgeInsets.only(left: 25, top: 15, bottom: 15),
+                        padding: const EdgeInsets.only(
+                            left: 15, top: 15, bottom: 15),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                               15,
@@ -51,18 +59,25 @@ class DashboardUrlCard extends StatelessWidget {
                                 Border.all(color: AppColors().kPrimaryGrey)),
                         child: Text(e['url']),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(13),
-                        child: Center(
-                          child: Icon(
-                            Icons.copy,
-                            color: AppColors().kPrimaryGreen,
+                      InkWell(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: e['url']));
+                          CustomSnackbar()
+                              .showCustomSnackbar(context, 'Copied!', true);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(13),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border:
+                                  Border.all(color: AppColors().kPrimaryGreen)),
+                          child: Center(
+                            child: Icon(
+                              Icons.copy,
+                              color: AppColors().kPrimaryGreen,
+                            ),
                           ),
                         ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border:
-                                Border.all(color: AppColors().kPrimaryGreen)),
                       )
                     ],
                   ),
@@ -70,7 +85,105 @@ class DashboardUrlCard extends StatelessWidget {
               );
             }).toList(),
           ),
-          SizedBox(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text('Worker',
+                  style:
+                      TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13)),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    padding:
+                        const EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          15,
+                        ),
+                        border: Border.all(color: AppColors().kPrimaryGrey)),
+                    child: Text(workerName + '.001'),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: workerName));
+                      CustomSnackbar()
+                          .showCustomSnackbar(context, 'Copied!', true);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: AppColors().kPrimaryGreen)),
+                      child: Center(
+                        child: Icon(
+                          Icons.copy,
+                          color: AppColors().kPrimaryGreen,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text('Password',
+                  style:
+                      TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13)),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    padding:
+                        const EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          15,
+                        ),
+                        border: Border.all(color: AppColors().kPrimaryGrey)),
+                    child: Text('123'),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: '123'));
+                      CustomSnackbar()
+                          .showCustomSnackbar(context, 'Copied!', true);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(13),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: AppColors().kPrimaryGreen)),
+                      child: Center(
+                        child: Icon(
+                          Icons.copy,
+                          color: AppColors().kPrimaryGreen,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
             height: 15,
           ),
         ],

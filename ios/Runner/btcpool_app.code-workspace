@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "btcpool_app",
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"java.project.sourcePaths": [
+			"lib/app/screens/revenue/components"
+		]
+	}
+}

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:btcpool_app/app/screens/dashboard/functions/functions.dart';
 import 'package:btcpool_app/app/screens/revenue/components/revenue_earnings_info_card.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 
 class RevenueEarningsCard extends StatelessWidget {
   final data;
@@ -10,11 +12,17 @@ class RevenueEarningsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Locale currentLocale = context.locale;
+
     DateTime dateTime = DateTime.parse(data['date'].toString());
-    String date = DateFormat('MMM d, yyyy, HH:mm').format(dateTime);
+    String date = DateFormat('MMM d, yyyy, HH:mm', currentLocale.toString())
+        .format(dateTime);
     String hashrate =
-        (double.parse(data['hashrate'].toString()) / 1e10).toStringAsFixed(3);
+        DashboardFunctions().hashrateConverter(data['hashrate'], 3)[0];
+    double convertedHashrate = double.parse(
+        (double.parse(data['hashrate'].toString()) / 1e6).toStringAsFixed(3));
+    String profit =
+        (data['total_profit'] / convertedHashrate).toStringAsFixed(8);
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -26,14 +34,14 @@ class RevenueEarningsCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(14),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColors().kPrimaryWhite),
+            color: Theme.of(context).colorScheme.secondary),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: Column(
                 children: [
@@ -41,13 +49,13 @@ class RevenueEarningsCard extends StatelessWidget {
                     children: [
                       Text(
                         date,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 13,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -57,13 +65,13 @@ class RevenueEarningsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Income',
+                            LocaleKeys.income.tr(),
                             style: TextStyle(
                                 fontSize: 12, color: AppColors().kPrimaryGrey),
                           ),
-                          Text('0.00010152 BTC',
-                              style: TextStyle(
-                                fontSize: 13,
+                          Text('${data['total_profit']} BTC',
+                              style: const TextStyle(
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ))
                         ],
@@ -72,13 +80,16 @@ class RevenueEarningsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hashrate',
+                            LocaleKeys.hashrate.tr(),
                             style: TextStyle(
                                 fontSize: 12, color: AppColors().kPrimaryGrey),
                           ),
-                          Text(hashrate + ' TH/s',
-                              style: TextStyle(
-                                fontSize: 13,
+                          Text(
+                              '$hashrate ' +
+                                  DashboardFunctions().hashrateConverter(
+                                      data['hashrate'], 3)[1],
+                              style: const TextStyle(
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ))
                         ],
@@ -87,13 +98,13 @@ class RevenueEarningsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Est. Profitability',
+                            'BTC / 1 TH',
                             style: TextStyle(
                                 fontSize: 12, color: AppColors().kPrimaryGrey),
                           ),
-                          Text(data['total_profit'].toString() + ' BTC',
-                              style: TextStyle(
-                                fontSize: 13,
+                          Text('$profit BTC',
+                              style: const TextStyle(
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700,
                               ))
                         ],
@@ -103,7 +114,7 @@ class RevenueEarningsCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 12,
               child: Icon(
                 Icons.arrow_forward_ios_outlined,
