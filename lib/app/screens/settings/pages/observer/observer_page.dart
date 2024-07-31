@@ -35,7 +35,7 @@ class ObserverPage extends StatelessWidget {
           withSubAccount: false,
         ),
       ),
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocListener<ObserverBloc, ObserverState>(
         listener: (context, state) {
           if (state is ObserverError) {

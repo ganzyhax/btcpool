@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors().kPrimaryBackgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
             child: CustomAppBar(

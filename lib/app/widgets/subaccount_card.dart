@@ -80,9 +80,9 @@ class SubAccountCard extends StatelessWidget {
                                         BlocProvider.of<DashboardBloc>(context)
                                             .add(DashboardChooseSubAccount(
                                                 index: index));
-                                        BlocProvider.of<WorkersBloc>(context)
-                                            .add(WorkersSubAccountIndexChange(
-                                                index: index));
+                                        // BlocProvider.of<WorkersBloc>(context)
+                                        //     .add(WorkersSubAccountIndexChange(
+                                        //         index: index));
                                         BlocProvider.of<RevenueBloc>(context)
                                             .add(RevenueSubAccountIndexChange(
                                                 index: index));

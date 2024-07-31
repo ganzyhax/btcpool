@@ -16,7 +16,7 @@ class RevenueEarnings extends StatelessWidget {
         if (state is RevenueLoaded) {
           return Container(
             padding: EdgeInsets.all(12),
-            color: AppColors().kPrimaryBackgroundColor,
+            color: Theme.of(context).colorScheme.background,
             child: Column(
               children: [
                 // InkWell(

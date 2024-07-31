@@ -8,7 +8,7 @@ class CustomTitleAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       leading: Container(
         child: IconButton(
           icon: Icon(CupertinoIcons.chevron_left),

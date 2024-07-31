@@ -23,7 +23,6 @@ class CustomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var isDark;
-    print(LocaleKeys.settings.tr() + "=" + title.toString());
     final state = BlocProvider.of<ThemeBloc>(context).state;
     if (state is ThemeLoaded) {
       isDark = state.isDark;

@@ -16,7 +16,7 @@ class SettingsItem extends StatelessWidget {
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: AppColors().kPrimaryWhite),
+            color: Theme.of(context).colorScheme.secondary),
         child: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

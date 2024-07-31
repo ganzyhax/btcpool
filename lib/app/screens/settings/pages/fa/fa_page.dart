@@ -14,7 +14,7 @@ class FAPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController fa = TextEditingController();
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: CustomTitleAppBar(
