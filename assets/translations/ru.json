@@ -23,7 +23,8 @@
     "level": "Уровень",
   "available":"Доступно",
   "unavailable": "недоступно"
-,
+,"comission": "Комиссия",
+"threshold": "Порог",
   "price": "Цена",
   "current_password": "Текущий пароль",
   "change": "Изменить",

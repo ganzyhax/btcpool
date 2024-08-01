@@ -10,11 +10,15 @@ final class RevenueLoaded extends RevenueState {
   final earningsData;
   final payoutsData;
   final List displayPayoutsDate;
-  final bool isLoading;
+  final bool isRLoading;
+  final bool isELoading;
   RevenueLoaded(
       {required this.displayEarningsDate,
       required this.displayPayoutsDate,
       required this.earningsData,
-      required this.isLoading,
+      required this.isRLoading,
+      required this.isELoading,
       required this.payoutsData});
 }
+
+final class Revenue extends RevenueState {}

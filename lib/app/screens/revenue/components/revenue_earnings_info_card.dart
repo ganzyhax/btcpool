@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:btcpool_app/app/screens/dashboard/functions/functions.dart';
 import 'package:btcpool_app/app/widgets/appbar/custom_title_appbar.dart';
@@ -14,8 +16,8 @@ class RevenueEarningsInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Locale currentLocale = context.locale;
-
-    List<dynamic> profitDetail = data['profit_detail'];
+    log(data.toString());
+    // List<dynamic> profitDetail = data['profit_detail'];
 
     DateTime dateTime = DateTime.parse(data['date'].toString());
     String date = DateFormat('MMM d, yyyy, HH:mm', currentLocale.toString())
@@ -64,44 +66,44 @@ class RevenueEarningsInfoCard extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            Text(
-              LocaleKeys.reward_split.tr(),
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            DataTable(
-              dividerThickness: 0.0,
-              dataRowHeight: 40,
-              horizontalMargin: 0,
-              columns: [
-                DataColumn(
-                    label: Text(LocaleKeys.split.tr(),
-                        style: const TextStyle(fontSize: 13))),
-                DataColumn(
-                    label: Text(
-                  LocaleKeys.account_name.tr(),
-                  style: const TextStyle(fontSize: 13),
-                )),
-                DataColumn(
-                    label: Text(LocaleKeys.amount.tr(),
-                        style: const TextStyle(fontSize: 13))),
-              ],
-              rows: profitDetail.map((detail) {
-                return DataRow(
-                  cells: [
-                    DataCell(Text(
-                        '${detail['percentage'].toString().split('.')[0]}%',
-                        textAlign: TextAlign.center)),
-                    DataCell(Text(detail['name'].toString(),
-                        textAlign: TextAlign.center)),
-                    DataCell(Text('${detail['profit']} BTC',
-                        textAlign: TextAlign.center)),
-                  ],
-                );
-              }).toList(),
-            ),
+            // Text(
+            //   LocaleKeys.reward_split.tr(),
+            //   style: const TextStyle(fontWeight: FontWeight.w600),
+            // ),
+            // const SizedBox(
+            //   height: 15,
+            // ),
+            // DataTable(
+            //   dividerThickness: 0.0,
+            //   dataRowHeight: 40,
+            //   horizontalMargin: 0,
+            //   columns: [
+            //     DataColumn(
+            //         label: Text(LocaleKeys.split.tr(),
+            //             style: const TextStyle(fontSize: 13))),
+            //     DataColumn(
+            //         label: Text(
+            //       LocaleKeys.account_name.tr(),
+            //       style: const TextStyle(fontSize: 13),
+            //     )),
+            //     DataColumn(
+            //         label: Text(LocaleKeys.amount.tr(),
+            //             style: const TextStyle(fontSize: 13))),
+            //   ],
+            //   rows: profitDetail.map((detail) {
+            //     return DataRow(
+            //       cells: [
+            //         DataCell(Text(
+            //             '${detail['percentage'].toString().split('.')[0]}%',
+            //             textAlign: TextAlign.center)),
+            //         DataCell(Text(detail['name'].toString(),
+            //             textAlign: TextAlign.center)),
+            //         DataCell(Text('${detail['profit']} BTC',
+            //             textAlign: TextAlign.center)),
+            //       ],
+            //     );
+            //   }).toList(),
+            // ),
           ],
         ),
       ),

@@ -24,8 +24,9 @@
   "level": "Nivel",
   "price": "Precio",
   "available":"Disponible",
+  "threshold": "Umbral",
   "unavailable": "No disponible"
-,
+,"comission": "Comisión",
   "current_password": "Contraseña actual",
   "change": "Cambiar",
   "referral_program": "Programa de referidos",

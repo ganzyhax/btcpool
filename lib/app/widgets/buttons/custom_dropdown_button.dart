@@ -31,9 +31,9 @@ class CustomDropdownButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Theme.of(context).colorScheme.background,
         ),
-        dropdownColor: Colors.white,
+        dropdownColor: Theme.of(context).colorScheme.secondary,
         value: selectedValue,
         onChanged: function,
         items: items);

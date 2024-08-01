@@ -172,6 +172,7 @@ class _SubaccountCreateModalState extends State<SubaccountCreateModal> {
                                           ? false
                                           : true,
                                   function: () {
+                                    print('asdadasd');
                                     BlocProvider.of<SubaccountBloc>(context)
                                         .add(SubaccountCreate(
                                             name: name.text,

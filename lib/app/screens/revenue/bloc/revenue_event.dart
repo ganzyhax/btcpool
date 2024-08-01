@@ -23,3 +23,7 @@ class RevenueSubAccountIndexChange extends RevenueEvent {
 class RevenueLoadPayouts extends RevenueEvent {}
 
 class RevenueLoadEarnings extends RevenueEvent {}
+
+class RevenueClear extends RevenueEvent {}
+
+class RevenueUpdateSubaccount extends RevenueEvent {}

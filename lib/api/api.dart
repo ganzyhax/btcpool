@@ -168,10 +168,11 @@ class ApiClient {
           return jsonDecode(response.body);
         }
       } else {
+        log(response.body.toString());
         if (response.body.toString() == '' || response.body.toString() == ' ') {
           return '';
         }
-        log(jsonDecode(response.body));
+
         if (jsonDecode(utf8.decode(response.bodyBytes))
             .containsKey('error_code')) {
           if (jsonDecode(utf8.decode(response.bodyBytes))['error_code'] ==

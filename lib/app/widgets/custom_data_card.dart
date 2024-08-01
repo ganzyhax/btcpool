@@ -1,10 +1,13 @@
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDataCard extends StatelessWidget {
   final String title;
   final String data;
-  const CustomDataCard({super.key, required this.title, required this.data});
+  final String? urlOpen;
+  const CustomDataCard(
+      {super.key, required this.title, required this.data, this.urlOpen});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +18,22 @@ class CustomDataCard extends StatelessWidget {
           title,
           style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 14),
         ),
-        Text(
-          data,
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
+        (urlOpen != null)
+            ? InkWell(
+                onTap: () async {
+                  if (await canLaunch(urlOpen.toString())) {
+                    await launch(urlOpen.toString());
+                  } else {}
+                },
+                child: Text(
+                  data,
+                  style: const TextStyle(color: Colors.blue, fontSize: 16),
+                ),
+              )
+            : Text(
+                data,
+                style: const TextStyle(fontSize: 16),
+              )
       ]),
     );
   }

@@ -22,6 +22,8 @@ abstract class  LocaleKeys {
   static const level = 'level';
   static const available = 'available';
   static const unavailable = 'unavailable';
+  static const comission = 'comission';
+  static const threshold = 'threshold';
   static const price = 'price';
   static const current_password = 'current_password';
   static const change = 'change';

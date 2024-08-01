@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:btcpool_app/api/api.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'subaccount_event.dart';
@@ -45,13 +47,23 @@ class SubaccountBloc extends Bloc<SubaccountEvent, SubaccountState> {
             selectedSubAccounts: selectedSubAccounts));
         var data = await ApiClient.post(
             'api/v1/pools/sub_account/create/',
-            {
-              'crypto_currency': "BTC",
-              'earning_scheme_id': (method == 'FPPS') ? 1 : 2,
-              'name': event.name,
-              'wallet_address': event.wallet + '\t',
-            },
-            withBadRequest: false);
+            (selectedSubAccounts.length != 0)
+                ? {
+                    'crypto_currency': "BTC",
+                    'earning_scheme_id':
+                        (method == 'FPPS') ? 1.toString() : 2.toString(),
+                    'name': event.name,
+                    'wallet_address': event.wallet,
+                    'virtual_sub_accounts': selectedSubAccounts
+                  }
+                : {
+                    'crypto_currency': "BTC",
+                    'earning_scheme_id':
+                        (method == 'FPPS') ? 1.toString() : 2.toString(),
+                    'name': event.name,
+                    'wallet_address': event.wallet,
+                  },
+            withBadRequest: true);
         if (data.containsKey('title')) {
           emit(SubaccountNewError(message: data['title']));
           isLoading = false;
@@ -85,18 +97,20 @@ class SubaccountBloc extends Bloc<SubaccountEvent, SubaccountState> {
             isCheck: isCheck,
             selectedSubAccounts: selectedSubAccounts));
         var data = await ApiClient.post(
-            'api/v1/sub_accounts/create/',
-            (selectedSubAccounts.isNotEmpty)
+            'api/v1/pools/sub_account/create/',
+            (selectedSubAccounts.length != 0)
                 ? {
                     'crypto_currency': "BTC",
-                    'earning_scheme_id': (method == 'FPPS') ? 2 : 2,
+                    'earning_scheme_id':
+                        (method == 'FPPS') ? 1.toString() : 2.toString(),
                     'name': event.name,
                     'wallet_address': event.wallet,
                     'virtual_sub_accounts': selectedSubAccounts
                   }
                 : {
                     'crypto_currency': "BTC",
-                    'earning_scheme_id': (method == 'FPPS') ? 2 : 2,
+                    'earning_scheme_id':
+                        (method == 'FPPS') ? 1.toString() : 2.toString(),
                     'name': event.name,
                     'wallet_address': event.wallet,
                   },
@@ -204,7 +218,7 @@ class SubaccountBloc extends Bloc<SubaccountEvent, SubaccountState> {
           isLoading: isLoading,
         ));
         var res = await ApiClient.post(
-          'api/v1/sub_accounts/virtual_sub_accounts_update/',
+          'api/v1/pools/sub_account/virtual_sub_accounts_update/',
           event.data,
         );
         isLoading = false;
@@ -251,7 +265,7 @@ class SubaccountBloc extends Bloc<SubaccountEvent, SubaccountState> {
         String name = event.data['name'];
         event.data.remove('name');
         var res = await ApiClient.patch(
-          'api/v1/sub_accounts/sub_account_update/wallet_address/',
+          'api/v1/pools/sub_account/sub_account_update/wallet_address/',
           event.data,
         );
         isLoading = false;

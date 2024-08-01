@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:btcpool_app/app/widgets/appbar/custom_title_appbar.dart';
 import 'package:btcpool_app/app/widgets/buttons/custom_button.dart';
 import 'package:btcpool_app/app/widgets/custom_data_card.dart';
 import 'package:btcpool_app/data/const.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 
 class RevenuePayoutsInfoCard extends StatelessWidget {
   final data;
@@ -11,16 +12,18 @@ class RevenuePayoutsInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
+    Locale currentLocale = context.locale;
+
     DateTime dateTime = DateTime.parse(data['paid_date'].toString());
-    String date = DateFormat('MMM d, yyyy, HH:mm').format(dateTime);
+    String date = DateFormat('MMM d, yyyy, HH:mm', currentLocale.toString())
+        .format(dateTime);
 
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: CustomTitleAppBar(
-          title: 'Payouts',
+          title: LocaleKeys.payouts.tr(),
         ),
       ),
       body: Padding(
@@ -29,19 +32,21 @@ class RevenuePayoutsInfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomDataCard(
-              title: 'Date',
+              title: LocaleKeys.date.tr(),
               data: date,
             ),
             CustomDataCard(
               title: 'TxID',
               data: data['tx_id'],
+              urlOpen: 'https://blockchair.com/ru/bitcoin/transaction/' +
+                  data['tx_id'],
             ),
             CustomDataCard(
-              title: 'Amount',
-              data: data['amount'].toString() + ' BTC',
+              title: LocaleKeys.amount.tr(),
+              data: '${data['amount']} BTC',
             ),
             CustomDataCard(
-              title: 'Wallet',
+              title: LocaleKeys.wallet.tr(),
               data: data['address'].toString(),
             ),
           ],
