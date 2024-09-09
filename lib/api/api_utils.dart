@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:btcpool_app/controller/update_controller.dart';
-import 'package:btcpool_app/data/cache_data/cache_hive.dart';
-import 'package:btcpool_app/data/const.dart';
+import 'package:btcpool_app/controllers/update_controller.dart';
+import 'package:btcpool_app/local_data/cache_data/cache_hive.dart';
+import 'package:btcpool_app/local_data/const.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -81,14 +81,14 @@ class AuthUtils {
     return userName;
   }
 
-  static Future<void> saveMobileVersion() async {
+  static Future<void> saveMobileVer() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String buildNumber = packageInfo.buildNumber;
-    await storage.write(key: 'buildVersion', value: buildNumber);
+    await storage.write(key: 'buildVer', value: buildNumber);
   }
 
   static Future<String> getIndexMobileVersion() async {
-    String? data = await storage.read(key: 'buildVersion');
+    String? data = await storage.read(key: 'buildVer');
     if (data != null) {
       return data;
     } else {
@@ -97,11 +97,11 @@ class AuthUtils {
   }
 
   static Future<void> setRecUpdateSkip() async {
-    await storage.write(key: 'isSkipped', value: 'true');
+    await storage.write(key: 'isSkip', value: 'true');
   }
 
   static Future<bool> getRecUpdateSkip() async {
-    String? data = await storage.read(key: 'isSkipped');
+    String? data = await storage.read(key: 'isSkip');
     if (data != null) {
       if (data == 'true') {
         return true;
@@ -168,9 +168,9 @@ class AuthUtils {
             : jsonEncode(
                 {'username': username, 'password': password, 'otp_code': otp}),
       );
-      log(response.body.toString());
+
       final data = jsonDecode(response.body);
-      log(data.toString());
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data.containsKey('oauth_token')) {
@@ -243,12 +243,17 @@ class AuthUtils {
     }
   }
 
-  static Future<dynamic> register(String username, String email,
-      String password, String password2, int countryId) async {
+  static Future<dynamic> register(
+    String email,
+    String fio,
+    String phone,
+    String password,
+    String organizationBin,
+  ) async {
     final MyController controller = Get.put(MyController());
     String mbVer = await AuthUtils.getIndexMobileVersion();
 
-    final url = Uri.parse('https://back.21pool.io/api/v1/users/register/');
+    final url = Uri.parse('https://back.btcpool.kz/api/v1/users/register/');
     try {
       final response = await http.post(
         url,
@@ -258,14 +263,15 @@ class AuthUtils {
           'Mobapp-Version': mbVer,
         },
         body: jsonEncode({
-          "username": username,
+          "username": fio,
+          "organization_bin": organizationBin,
           "email": email,
           "password": password,
-          "password2": password2,
-          "country_id": countryId
+          "password2": password,
+          "phone": phone,
         }),
       );
-
+      log(response.body.toString());
       if (response.statusCode == 200) {
         // await saveToken('accessToken', data['access']);
         // await saveToken('refreshToken', data['refresh']);
@@ -286,6 +292,7 @@ class AuthUtils {
         }
       }
     } catch (e) {
+      log(e.toString());
       return false;
     }
   }
@@ -298,7 +305,7 @@ class AuthUtils {
     String mbVer = await AuthUtils.getIndexMobileVersion();
 
     final url = Uri.parse(
-        'https://back.21pool.io/api/v1/users/verification_code/send/');
+        'https://back.btcpool.kz/api/v1/users/verification_code/send/');
     try {
       final response = await http.post(
         url,
@@ -344,7 +351,7 @@ class AuthUtils {
 
     String mbVer = await AuthUtils.getIndexMobileVersion();
     final url = Uri.parse(
-        'https://back.21pool.io/api/v1/users/verification_code/verify/');
+        'https://back.btcpool.kz/api/v1/users/verification_code/verify/');
     try {
       final response = await http.post(
         url,
@@ -394,7 +401,7 @@ class AuthUtils {
 
     String mbVer = await AuthUtils.getIndexMobileVersion();
     final url =
-        Uri.parse('https://back.21pool.io/api/v1/users/reset_password/send/');
+        Uri.parse('https://back.btcpool.kz/api/v1/users/reset_password/send/');
     try {
       final response = await http.post(
         url,
@@ -433,8 +440,8 @@ class AuthUtils {
   }
 
   static Future<dynamic> resetConfirmCode(String email, String code) async {
-    final url =
-        Uri.parse('https://back.21pool.io/api/v1/users/reset_password/verify/');
+    final url = Uri.parse(
+        'https://back.btcpool.kz/api/v1/users/reset_password/verify/');
     final MyController controller = Get.put(MyController());
 
     String mbVer = await AuthUtils.getIndexMobileVersion();
@@ -475,7 +482,7 @@ class AuthUtils {
   static Future<dynamic> resetSetPassword(
       String email, String password, String resetToken) async {
     final url =
-        Uri.parse('https://back.21pool.io/api/v1/users/reset_password/');
+        Uri.parse('https://back.btcpool.kz/api/v1/users/reset_password/');
     final MyController controller = Get.put(MyController());
 
     String mbVer = await AuthUtils.getIndexMobileVersion();

@@ -1,9 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
-  static const to_setup_low_hashrate_notification = 'to_setup_low_hashrate_notification';
-  static const url_for_bot = 'url_for_bot';
-  static const telegram_notification = 'telegram_notification';
   static const your_token_to_subscribe = 'your_token_to_subscribe';
   static const your_previus_application_is_under_review = 'your_previus_application_is_under_review';
   static const account_delete_dont_match_error = 'account_delete_dont_match_error';
@@ -15,8 +12,6 @@ abstract class  LocaleKeys {
   static const search = 'search';
   static const join_our_mining_referral_program = 'join_our_mining_referral_program';
   static const the_reward_is_paid_out = 'the_reward_is_paid_out';
-  static const levels_info = 'levels_info';
-  static const ambassadors_can_adjust_commission = 'ambassadors_can_adjust_commission';
   static const if_your_invited_referral = 'if_your_invited_referral';
   static const referral_levels = 'referral_levels';
   static const level = 'level';
@@ -67,6 +62,9 @@ abstract class  LocaleKeys {
   static const power_cost_per_kwh = 'power_cost_per_kwh';
   static const power_consumption = 'power_consumption';
   static const pool_fee = 'pool_fee';
+  static const to_setup_low_hashrate_notification = 'to_setup_low_hashrate_notification';
+  static const url_for_bot = 'url_for_bot';
+  static const telegram_notification = 'telegram_notification';
   static const revenue_change_info = 'revenue_change_info';
   static const username_login = 'username_login';
   static const confirm_delete_account = 'confirm_delete_account';
@@ -74,15 +72,6 @@ abstract class  LocaleKeys {
   static const create_subaccount_required = 'create_subaccount_required';
   static const update = 'update';
   static const new_version_available = 'new_version_available';
-  static const skip = 'skip';
-  static const choose_subaccounts = 'choose_subaccounts';
-  static const hasrate_graphics = 'hasrate_graphics';
-  static const confirm = 'confirm';
-  static const reset_password = 'reset_password';
-  static const connected = 'connected';
-  static const scan_qr_code = 'scan_qr_code';
-  static const copied = 'copied';
-  static const fa_code = 'fa_code';
   static const create_observer_url = 'create_observer_url';
   static const name = 'name';
   static const rights = 'rights';
@@ -94,6 +83,15 @@ abstract class  LocaleKeys {
   static const sign_in = 'sign_in';
   static const log_in = 'log_in';
   static const sign_up = 'sign_up';
+  static const skip = 'skip';
+  static const choose_subaccounts = 'choose_subaccounts';
+  static const hasrate_graphics = 'hasrate_graphics';
+  static const confirm = 'confirm';
+  static const reset_password = 'reset_password';
+  static const connected = 'connected';
+  static const scan_qr_code = 'scan_qr_code';
+  static const copied = 'copied';
+  static const fa_code = 'fa_code';
   static const dont_have_account = 'dont_have_account';
   static const forgot_password = 'forgot_password';
   static const fa_verification = 'fa_verification';

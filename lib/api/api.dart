@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:btcpool_app/api/api_utils.dart';
-import 'package:btcpool_app/controller/update_controller.dart';
+import 'package:btcpool_app/controllers/update_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';

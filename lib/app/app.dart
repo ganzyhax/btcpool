@@ -1,22 +1,17 @@
-import 'package:btcpool_app/app/bloc/theme_bloc.dart';
-import 'package:btcpool_app/app/screens/dashboard/bloc/dashboard_bloc.dart';
-import 'package:btcpool_app/app/screens/login/bloc/login_bloc.dart';
-import 'package:btcpool_app/app/screens/navigator/bloc/main_navigator_bloc.dart';
-import 'package:btcpool_app/app/screens/reset/bloc/reset_bloc.dart';
-import 'package:btcpool_app/app/screens/revenue/bloc/revenue_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/api/bloc/api_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/calculator/bloc/calculator_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/fa/bloc/fa_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/language/bloc/language_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/notification/bloc/notification_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/observer/bloc/observer_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/referral/bloc/referral_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/security/bloc/security_bloc.dart';
-import 'package:btcpool_app/app/screens/settings/pages/subaccount/bloc/subaccount_bloc.dart';
-import 'package:btcpool_app/app/screens/signup/bloc/signup_bloc.dart';
-import 'package:btcpool_app/app/screens/splash/splash_screen.dart';
-import 'package:btcpool_app/app/screens/workers/bloc/workers_bloc.dart';
-import 'package:btcpool_app/theme/theme.dart';
+import 'package:btcpool_app/app/main_bloc/theme_bloc.dart';
+import 'package:btcpool_app/app/views/dashboard/bloc/dashboard_bloc.dart';
+import 'package:btcpool_app/app/views/login/bloc/login_bloc.dart';
+import 'package:btcpool_app/app/views/navigator/bloc/main_navigator_bloc.dart';
+import 'package:btcpool_app/app/views/reset/bloc/reset_bloc.dart';
+import 'package:btcpool_app/app/views/revenue/bloc/revenue_bloc.dart';
+import 'package:btcpool_app/app/views/settings/pages/api/bloc/api_bloc.dart';
+import 'package:btcpool_app/app/views/settings/pages/fa/bloc/fa_bloc.dart';
+import 'package:btcpool_app/app/views/settings/pages/language/bloc/language_bloc.dart';
+import 'package:btcpool_app/app/views/settings/pages/security/bloc/security_bloc.dart';
+import 'package:btcpool_app/app/views/settings/pages/subaccount/bloc/subaccount_bloc.dart';
+import 'package:btcpool_app/app/views/signup/bloc/signup_bloc.dart';
+import 'package:btcpool_app/app/views/splash/splash_screen.dart';
+import 'package:btcpool_app/local_theme/theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,18 +24,6 @@ class BTCPool extends StatelessWidget {
     // final dashboardBloc = GetIt.instance<DashboardBloc>();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => MainNavigatorBloc()..add(MainNavigatorLoad()),
-        ),
-        BlocProvider(
-          create: (context) => LoginBloc()..add(LoginLaod()),
-        ),
-        BlocProvider(
-          create: (context) => DashboardBloc()..add(DashboardLoad()),
-        ),
-        BlocProvider(
-          create: (context) => WorkersBloc()..add(WorkersLoad()),
-        ),
         BlocProvider(
           create: (context) => SignupBloc()..add(SignupLoad()),
         ),
@@ -60,22 +43,19 @@ class BTCPool extends StatelessWidget {
           create: (context) => SubaccountBloc()..add(SubaccountLoad()),
         ),
         BlocProvider(
-          create: (context) => ObserverBloc()..add(ObserverLoad()),
+          create: (context) => MainNavigatorBloc()..add(MainNavigatorLoad()),
         ),
         BlocProvider(
-          create: (context) => CalculatorBloc()..add(CalculatorLoad()),
+          create: (context) => LoginBloc()..add(LoginLaod()),
+        ),
+        BlocProvider(
+          create: (context) => DashboardBloc()..add(DashboardLoad()),
         ),
         BlocProvider(
           create: (context) => LanguageBloc()..add(LanguageLoad()),
         ),
         BlocProvider(
           create: (context) => SecurityBloc()..add(SecurityLoad()),
-        ),
-        BlocProvider(
-          create: (context) => ReferralBloc()..add(ReferralLoad()),
-        ),
-        BlocProvider(
-          create: (context) => NotificationBloc()..add(NotificationLoad()),
         ),
       ],
       child: BlocProvider(
