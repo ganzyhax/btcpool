@@ -25,8 +25,10 @@ class CustomNavigationBar extends StatelessWidget {
                   height: 80,
                   width: double.maxFinite,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

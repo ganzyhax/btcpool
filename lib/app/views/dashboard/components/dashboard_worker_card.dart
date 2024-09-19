@@ -7,23 +7,16 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 
-class DashboardHashrateInfoCard extends StatelessWidget {
+class DashboardWorkerCard extends StatelessWidget {
   final data;
-  final String title;
-  final bool isHashrate;
 
-  const DashboardHashrateInfoCard(
-      {super.key,
-      required this.data,
-      required this.title,
-      required this.isHashrate});
+  const DashboardWorkerCard({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
-    var h10 = DashboardFunctions().hashrateConverter(data[0].toDouble(), 2);
-    var h24 = DashboardFunctions().hashrateConverter(data[1].toDouble(), 2);
-    var h1 = DashboardFunctions().hashrateConverter(data[2].toDouble(), 2);
-
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -34,14 +27,11 @@ class DashboardHashrateInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Cредний хешрейт за 10 минут',
+            'Активные майнеры',
             style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
           ).tr(),
-          const SizedBox(
-            height: 5,
-          ),
           Text(
-            h10[0] + ' ' + h10[1],
+            data[0].toString(),
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           SizedBox(
@@ -56,19 +46,19 @@ class DashboardHashrateInfoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      h1[0] + ' ' + h1[1],
+                      (data[0] + data[1]).toString(),
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    TransparentLine(color: Colors.orange),
+                    TransparentLine(color: Colors.green),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'За час',
+                      'Общий',
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],
@@ -80,26 +70,26 @@ class DashboardHashrateInfoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      h24[0] + ' ' + h24[1],
+                      data[1].toString(),
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    TransparentLine(color: Colors.orange),
+                    TransparentLine(color: Colors.red),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'За день',
+                      'Неактивные',
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

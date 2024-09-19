@@ -1,3 +1,4 @@
+import 'package:btcpool_app/app/components/custom_line.dart';
 import 'package:btcpool_app/local_data/const.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -28,47 +29,60 @@ class DashboardInfoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
-          ).tr(),
+          Row(
+            children: [
+              Text(
+                title,
+                style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
+              ).tr(),
+              SizedBox(
+                width: 10,
+              ),
+              SizedBox(
+                height: 25,
+                child: Image.asset('assets/images/btc_logo.png'),
+              ),
+            ],
+          ),
           const SizedBox(
-            height: 5,
+            height: 15,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  SizedBox(
-                    height: 45,
-                    child: Image.asset('assets/images/btc_logo.png'),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
                   Row(
                     children: [
                       Text(
                         data.toString(),
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 21),
+                            fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                       Text(
                         '≈' + priceInUsd + '\$',
                         style: TextStyle(
-                            color: AppColors().kPrimaryGrey, fontSize: 21),
+                            color: AppColors().kPrimaryGrey, fontSize: 24),
                       ),
                     ],
                   ),
                 ],
               ),
-              Text(
-                'BTC',
-                style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
-                textAlign: TextAlign.end,
-              )
             ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+              width: MediaQuery.of(context).size.width / 3,
+              child: TransparentLine(color: Colors.blue)),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            'BTC',
+            style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 16),
+            textAlign: TextAlign.end,
           )
         ],
       ),

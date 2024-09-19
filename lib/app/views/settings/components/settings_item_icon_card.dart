@@ -17,12 +17,14 @@ class SettingsItemIconCard extends StatelessWidget {
       child: Center(
         child: SvgPicture.asset(
           asset,
+          width: 25,
+          height: 25,
           color: AppColors().kPrimaryGreen,
         ),
       ),
       decoration: BoxDecoration(
           color: AppColors().kPrimaryGreen.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(50)),
       padding: EdgeInsets.all(
         10,
       ),

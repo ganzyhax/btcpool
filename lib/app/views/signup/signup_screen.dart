@@ -121,18 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors().kPrimaryBackgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(
-          child: SizedBox(
-            width: 120,
-            child: Image.asset(
-              'assets/images/btcpool_logo.png',
-            ),
-          ),
-        ),
-      ),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: BlocListener<SignupBloc, SignupState>(
         listener: (context, state) {
           if (state is SignupVerifyOpen) {
@@ -165,261 +154,293 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          LocaleKeys.sign_up.tr(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text(LocaleKeys.email.tr()),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        hintText: LocaleKeys.email.tr(),
-                        controller: email,
-                      ),
-                      (emailValidator == '' || emailValidator == null)
-                          ? SizedBox()
-                          : Text(
-                              emailValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('ФИО'),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        hintText: 'ФИО',
-                        controller: fio,
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('Номер телефона'),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        hintText: 'Номер телефона',
-                        controller: phone,
-                      ),
-                      (phoneValidator == '' || phoneValidator == null)
-                          ? SizedBox()
-                          : Text(
-                              phoneValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text('БИН'),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        maxLength: 12,
-                        hintText: 'БИН',
-                        isNumber: true,
-                        controller: bin,
-                        onChanged: (value) {
-                          if (value.length == 12) {
-                            BlocProvider.of<SignupBloc>(context)
-                              ..add(SignupFindBin(value: value));
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      (state.findedBin == '')
-                          ? SizedBox()
-                          : (state.findedBin == 'null')
-                              ? Text(
-                                  'Пожалуйста, введите правильный BIN',
-                                  style: TextStyle(
-                                      color: Colors.red, fontSize: 12),
-                                )
-                              : Text(
-                                  state.findedBin,
-                                  style: TextStyle(
-                                      color: Colors.green, fontSize: 12),
-                                ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text(LocaleKeys.password.tr()),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        controller: password,
-                        hintText: '********',
-                        isPassword: true,
-                        passwordShow: pShow,
-                        onTapIcon: () {
-                          if (pShow) {
-                            pShow = false;
-                          } else {
-                            pShow = true;
-                          }
-                          setState(() {});
-                        },
-                      ),
-                      (passwordValidator == '' || passwordValidator == null)
-                          ? SizedBox()
-                          : Text(
-                              passwordValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Text(LocaleKeys.repeat_password.tr()),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      CustomTextField(
-                        controller: rpassword,
-                        hintText: '********',
-                        isPassword: true,
-                        passwordShow: rpShow,
-                        onTapIcon: () {
-                          if (rpShow) {
-                            rpShow = false;
-                          } else {
-                            rpShow = true;
-                          }
-                          setState(() {});
-                        },
-                      ),
-                      (passwordMatchValidator == '' ||
-                              passwordMatchValidator == null)
-                          ? SizedBox()
-                          : Text(
-                              passwordMatchValidator.toString(),
-                              style: TextStyle(fontSize: 12, color: Colors.red),
-                            ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.2,
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    style: TextStyle(
-                                        color: (Theme.of(context)
-                                                    .colorScheme
-                                                    .brightness ==
-                                                Brightness.dark)
-                                            ? Colors.white
-                                            : Colors.black),
-                                    text: LocaleKeys
-                                            .by_continuing_you_agree_to_our
-                                            .tr() +
-                                        ' ',
-                                  ),
-                                  TextSpan(
-                                    text: LocaleKeys.terms_and_conditions.tr(),
-                                    style: TextStyle(color: Colors.blue),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        const privacyUrl =
-                                            'https://new.btcpool.kz/rules';
-                                        if (await canLaunch(privacyUrl)) {
-                                          await launch(privacyUrl);
-                                        } else {}
-                                      },
-                                  ),
-                                  TextSpan(
-                                    text: ' ' + LocaleKeys.and.tr() + ' ',
-                                    style: TextStyle(
-                                        color: (Theme.of(context)
-                                                    .colorScheme
-                                                    .brightness ==
-                                                Brightness.dark)
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                  TextSpan(
-                                    text: LocaleKeys.privacy_policy.tr(),
-                                    style: TextStyle(color: Colors.blue),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        const privacyUrl =
-                                            'https://new.btcpool.kz/policy';
-                                        if (await canLaunch(privacyUrl)) {
-                                          await launch(privacyUrl);
-                                        } else {}
-                                      },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      CustomButton(
-                        function: () {
-                          BlocProvider.of<SignupBloc>(context).add(
-                              SignupRegister(
-                                  email: email.text,
-                                  username: fio.text,
-                                  password: password.text,
-                                  organization_bin: bin.text,
-                                  phone: phone.text));
-                        },
-                        text: LocaleKeys.sign_up.tr(),
-                        isEnable: (email.text.isEmpty ||
-                                state.findedBin == '' ||
-                                state.findedBin == 'null' ||
-                                emailValidator != '' ||
-                                passwordValidator != '' ||
-                                passwordMatchValidator != '' ||
-                                phone.text.isEmpty ||
-                                password.text.isEmpty ||
-                                rpassword.text.isEmpty)
-                            ? false
-                            : true,
-                      ),
                       SizedBox(
                         height: 5,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(LocaleKeys.already_have_an_account.tr()),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginScreen()),
-                              );
-                            },
-                            child: Text(
-                              LocaleKeys.log_in.tr(),
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                      Center(
+                        child: SizedBox(
+                            height: 140,
+                            width: 140,
+                            child: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? Image.asset('assets/images/btcpool_logo.png')
+                                : Image.asset(
+                                    'assets/images/btcpool_logo.png',
+                                  )),
+                      ),
+                      Text(
+                        LocaleKeys.sign_up.tr(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 26),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(LocaleKeys.email.tr()),
+                            SizedBox(
+                              height: 7,
                             ),
-                          )
-                        ],
-                      )
+                            CustomTextField(
+                              hintText: LocaleKeys.email.tr(),
+                              controller: email,
+                            ),
+                            (emailValidator == '' || emailValidator == null)
+                                ? SizedBox()
+                                : Text(
+                                    emailValidator.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red),
+                                  ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text('ФИО'),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            CustomTextField(
+                              hintText: 'ФИО',
+                              controller: fio,
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text('Номер телефона'),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            CustomTextField(
+                              hintText: 'Номер телефона',
+                              controller: phone,
+                            ),
+                            (phoneValidator == '' || phoneValidator == null)
+                                ? SizedBox()
+                                : Text(
+                                    phoneValidator.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red),
+                                  ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text('БИН'),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            CustomTextField(
+                              maxLength: 12,
+                              hintText: 'БИН',
+                              isNumber: true,
+                              controller: bin,
+                              onChanged: (value) {
+                                if (value.length == 12) {
+                                  BlocProvider.of<SignupBloc>(context)
+                                    ..add(SignupFindBin(value: value));
+                                }
+                              },
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            (state.findedBin == '')
+                                ? SizedBox()
+                                : (state.findedBin == 'null')
+                                    ? Text(
+                                        'Пожалуйста, введите правильный BIN',
+                                        style: TextStyle(
+                                            color: Colors.red, fontSize: 12),
+                                      )
+                                    : Text(
+                                        state.findedBin,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 12),
+                                      ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text(LocaleKeys.password.tr()),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            CustomTextField(
+                              controller: password,
+                              hintText: '********',
+                              isPassword: true,
+                              passwordShow: pShow,
+                              onTapIcon: () {
+                                if (pShow) {
+                                  pShow = false;
+                                } else {
+                                  pShow = true;
+                                }
+                                setState(() {});
+                              },
+                            ),
+                            (passwordValidator == '' ||
+                                    passwordValidator == null)
+                                ? SizedBox()
+                                : Text(
+                                    passwordValidator.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red),
+                                  ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text(LocaleKeys.repeat_password.tr()),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            CustomTextField(
+                              controller: rpassword,
+                              hintText: '********',
+                              isPassword: true,
+                              passwordShow: rpShow,
+                              onTapIcon: () {
+                                if (rpShow) {
+                                  rpShow = false;
+                                } else {
+                                  rpShow = true;
+                                }
+                                setState(() {});
+                              },
+                            ),
+                            (passwordMatchValidator == '' ||
+                                    passwordMatchValidator == null)
+                                ? SizedBox()
+                                : Text(
+                                    passwordMatchValidator.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.red),
+                                  ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.2,
+                                  child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          style: TextStyle(
+                                              color: (Theme.of(context)
+                                                          .colorScheme
+                                                          .brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                          text: LocaleKeys
+                                                  .by_continuing_you_agree_to_our
+                                                  .tr() +
+                                              ' ',
+                                        ),
+                                        TextSpan(
+                                          text: LocaleKeys.terms_and_conditions
+                                              .tr(),
+                                          style: TextStyle(color: Colors.blue),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              const privacyUrl =
+                                                  'https://new.btcpool.kz/rules';
+                                              if (await canLaunch(privacyUrl)) {
+                                                await launch(privacyUrl);
+                                              } else {}
+                                            },
+                                        ),
+                                        TextSpan(
+                                          text: ' ' + LocaleKeys.and.tr() + ' ',
+                                          style: TextStyle(
+                                              color: (Theme.of(context)
+                                                          .colorScheme
+                                                          .brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                        TextSpan(
+                                          text: LocaleKeys.privacy_policy.tr(),
+                                          style: TextStyle(color: Colors.blue),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              const privacyUrl =
+                                                  'https://new.btcpool.kz/policy';
+                                              if (await canLaunch(privacyUrl)) {
+                                                await launch(privacyUrl);
+                                              } else {}
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            CustomButton(
+                              function: () {
+                                BlocProvider.of<SignupBloc>(context).add(
+                                    SignupRegister(
+                                        email: email.text,
+                                        username: fio.text,
+                                        password: password.text,
+                                        organization_bin: bin.text,
+                                        phone: phone.text));
+                              },
+                              text: LocaleKeys.sign_up.tr(),
+                              isEnable: (email.text.isEmpty ||
+                                      state.findedBin == '' ||
+                                      state.findedBin == 'null' ||
+                                      emailValidator != '' ||
+                                      passwordValidator != '' ||
+                                      passwordMatchValidator != '' ||
+                                      phone.text.isEmpty ||
+                                      password.text.isEmpty ||
+                                      rpassword.text.isEmpty)
+                                  ? false
+                                  : true,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(LocaleKeys.already_have_an_account.tr()),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginScreen()),
+                                    );
+                                  },
+                                  child: Text(
+                                    ' ' + LocaleKeys.log_in.tr(),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -58,8 +58,8 @@ class CodegenLoader extends AssetLoader{
   "generate": "Жасау",
   "security_dont_support": "Рұқсат жоқ немесе құрылғы қолдамайды!",
   "unlock_with_faceid": "Face ID пайдалану",
-  "to_unlock_pool": "21Pool-ге қол жеткізу үшін Face ID арқылы ашу",
-  "unlock_pool": "21Pool-ді ашу",
+  "to_unlock_pool": "BTCPool-ге қол жеткізу үшін Face ID арқылы ашу",
+  "unlock_pool": "BTCPool-ді ашу",
   "auth_with_faceid": "Face ID арқылы аутентификация",
   "security": "Қауіпсіздік",
   "daily": "Күн сайын",
@@ -67,14 +67,6 @@ class CodegenLoader extends AssetLoader{
   "profitability_calculator": "Табыс калькуляторы",
   "calculate": "Есептеу",
   "loading": "Жүктелуде",
-  "estimated_24_hour_revenue": "Күндік болжамды табыс",
-  "estimated_30_day_revenue": "Айлық болжамды табыс",
-  "power_cost_per_day": "Күндік энергия құны",
-  "power_cost_per_month": "Айлық энергия құны",
-  "profit_cost_per_day": "Күндік табыс",
-  "profit_cost_per_month": "Айлық табыс",
-  "power_cost_per_kwh": "Энергия құны кВт/сағ",
-  "power_consumption": "Энергия тұтыну",
   "pool_fee": "Пул комиссиясы",
   "to_setup_low_hashrate_notification": "* Хэшрейт төмендеуі туралы хабарлама қосу үшін:\n1) Токеніңізді көшіріңіз\n2) Телеграм ботының чатына өтіңіз\n3) «Бастау» түймесін басыңыз\n4) Жауап алғаннан кейін, көшірілген Токенді қойып, жіберу түймесін басыңыз",
   "url_for_bot": "Ботқа сілтеме:",
@@ -215,7 +207,11 @@ class CodegenLoader extends AssetLoader{
   "edit_wallet_address": "Әмиян мекенжайын өзгерту",
   "current_wallet_address": "Ағымдағы әмиян мекенжайы",
   "new_wallet_address": "Жаңа әмиян мекенжайы",
-  "cancel": "Болдырмау"
+  "cancel": "Болдырмау",
+  "install_google_identifier": "Google идентификатор қолданбасын орнатыңыз (iOS/Android)",
+  "open_the_app_add_account": "Қолданбаны ашып, BTCPool аккаунтыңызды қосыңыз. Ол үшін QR кодты сканерлеңіз немесе кодты енгізіңіз:",
+  "enter_six_code_and_connect": "Қолданбадағы 6 таңбалы кодты енгізіп, «Қосу» батырмасын басыңыз",
+  "sss": "sss"
 };
 static const Map<String,dynamic> ru = {
   "your_previus_application_is_under_review": "Ваш предыдущий запрос находится на рассмотрении. Если вы хотите изменить процент, напишите в техническую поддержку.",
@@ -264,8 +260,8 @@ static const Map<String,dynamic> ru = {
   "referral_fee": "Комиссия за рефералов",
   "security_dont_support": "Нет разрешения или устройство не поддерживается!",
   "unlock_with_faceid": "Использовать Face ID",
-  "to_unlock_pool": "Разблокировать с помощью Face ID для доступа к 21Pool",
-  "unlock_pool": "Разблокировать 21Pool",
+  "to_unlock_pool": "Разблокировать с помощью Face ID для доступа к BTCPool",
+  "unlock_pool": "Разблокировать BTCPool",
   "auth_with_faceid": "Аутентифицируйтесь с помощью Face ID",
   "security": "Безопасность",
   "daily": "Ежедневно",
@@ -273,14 +269,6 @@ static const Map<String,dynamic> ru = {
   "profitability_calculator": "Калькулятор доходности",
   "calculate": "Рассчитать",
   "loading": "Загрузка",
-  "estimated_24_hour_revenue": "Примерный доход за день",
-  "estimated_30_day_revenue": "Примерный доход за месяц",
-  "power_cost_per_day": "Стоимость ЭЭ в день",
-  "power_cost_per_month": "Стоимость ЭЭ в месяц",
-  "profit_cost_per_day": "Прибыль в день",
-  "profit_cost_per_month": "Прибыль в месяц",
-  "power_cost_per_kwh": "Стоимость ЭЭ за кВт/ч",
-  "power_consumption": "Потребление ЭЭ",
   "pool_fee": "Комиссия за пул",
   "revenue_change_info": "Доход будет меняться в зависимости от сложности майнинга и цены биткоина.",
   "username_login": "Имя пользователя (логин)",
@@ -418,7 +406,11 @@ static const Map<String,dynamic> ru = {
   "edit_wallet_address": "Изменить адрес кошелька",
   "current_wallet_address": "Текущий адрес кошелька",
   "new_wallet_address": "Новый адрес кошелька",
-  "cancel": "Отменить"
+  "cancel": "Отменить",
+  "install_google_identifier": "Установите приложение Google Идентификатор (iOS/Android)",
+  "open_the_app_add_account": "Откройте приложение и добавьте свою учетную запись BTCPool. Для этого отсканируйте QR-код или введите код:",
+  "enter_six_code_and_connect": "Введите 6-значный код из приложения и нажмите «Подключить»",
+  "sss": "sss"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"kk": kk, "ru": ru};
 }

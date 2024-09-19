@@ -1,8 +1,11 @@
+import 'package:btcpool_app/app/components/appbar/custom_appbar.dart';
 import 'package:btcpool_app/app/views/settings/pages/fa/bloc/fa_bloc.dart';
 import 'package:btcpool_app/app/components/appbar/custom_title_appbar.dart';
 import 'package:btcpool_app/app/components/buttons/custom_button.dart';
 import 'package:btcpool_app/app/components/textfields/custom_textfiled.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:btcpool_app/local_data/const.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,17 +40,15 @@ class FAPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(child: SvgPicture.string(state.svgImage)),
+                            Text(LocaleKeys.install_google_identifier.tr()),
                             Text(
-                                '1. Install the Google Identifier application (iOS/Android)'),
-                            Text(
-                              '2. Open the application and add your 21pool account. To do this, scan the QR code or enter the code:',
+                              LocaleKeys.open_the_app_add_account.tr(),
                             ),
                             Text(
                               state.secretCode,
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
-                            Text(
-                                '3. Enter the 6-digit code from the application and click "Connect"'),
+                            Text(LocaleKeys.enter_six_code_and_connect.tr()),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Row(
@@ -65,7 +66,8 @@ class FAPage extends StatelessWidget {
                                   SizedBox(
                                       width: MediaQuery.of(context).size.width /
                                           2.2,
-                                      child: CustomButton(text: 'Connect'))
+                                      child: CustomButton(
+                                          text: LocaleKeys.connect.tr()))
                                 ],
                               ),
                             )

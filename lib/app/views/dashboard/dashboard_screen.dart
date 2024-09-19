@@ -4,6 +4,7 @@ import 'package:btcpool_app/app/views/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/views/dashboard/components/dashboard_balance_card.dart';
 import 'package:btcpool_app/app/views/dashboard/components/dashboard_hashrate_info_card.dart';
 import 'package:btcpool_app/app/views/dashboard/components/dashboard_url_card.dart';
+import 'package:btcpool_app/app/views/dashboard/components/dashboard_worker_card.dart';
 import 'package:btcpool_app/app/views/dashboard/components/dashborad_chart.dart';
 import 'package:btcpool_app/app/views/revenue/bloc/revenue_bloc.dart';
 import 'package:btcpool_app/app/components/appbar/custom_appbar.dart';
@@ -82,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return Center(child: CustomIndicator());
             }
             if (state is DashboardLoaded) {
-              log(state.dashboardData.toString());
+              log(state.dashboardData['data'].toString());
               return RefreshIndicator(
                 color: AppColors().kPrimaryGreen,
                 onRefresh: () async {
@@ -109,32 +110,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      DashboardHashrateInfoCard(
-                                        title: LocaleKeys.hashrate_card_t1,
-                                        isHashrate: false,
-                                        data: [
-                                          state.dashboardData['data']
-                                              ['hashrate_10min'],
-                                          state.dashboardData['data']
-                                              ['hashrate_24hour']
-                                        ],
-                                      ),
-                                      DashboardHashrateInfoCard(
-                                        title: LocaleKeys.workers_card_t1,
-                                        data: [
-                                          state.dashboardData['data']
-                                              ['active_workers'],
-                                          state.dashboardData['data']
-                                              ['unactive_workers']
-                                        ],
-                                        isHashrate: true,
-                                      ),
+                                  DashboardHashrateInfoCard(
+                                    title: LocaleKeys.hashrate_card_t1,
+                                    isHashrate: false,
+                                    data: [
+                                      state.dashboardData['data']
+                                          ['hashrate_10min'],
+                                      state.dashboardData['data']
+                                          ['hashrate_24hour'],
+                                      state.dashboardData['data']
+                                          ['hashrate_1hour']
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  DashboardWorkerCard(
+                                    data: [
+                                      state.dashboardData['data']
+                                          ['active_workers'],
+                                      state.dashboardData['data']
+                                          ['unactive_workers']
+                                    ],
+                                  )
                                 ],
                               )
                             : CustomIndicator(),

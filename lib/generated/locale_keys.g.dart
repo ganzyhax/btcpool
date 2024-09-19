@@ -53,14 +53,6 @@ abstract class  LocaleKeys {
   static const profitability_calculator = 'profitability_calculator';
   static const calculate = 'calculate';
   static const loading = 'loading';
-  static const estimated_24_hour_revenue = 'estimated_24_hour_revenue';
-  static const estimated_30_day_revenue = 'estimated_30_day_revenue';
-  static const power_cost_per_day = 'power_cost_per_day';
-  static const power_cost_per_month = 'power_cost_per_month';
-  static const profit_cost_per_day = 'profit_cost_per_day';
-  static const profit_cost_per_month = 'profit_cost_per_month';
-  static const power_cost_per_kwh = 'power_cost_per_kwh';
-  static const power_consumption = 'power_consumption';
   static const pool_fee = 'pool_fee';
   static const to_setup_low_hashrate_notification = 'to_setup_low_hashrate_notification';
   static const url_for_bot = 'url_for_bot';
@@ -202,5 +194,9 @@ abstract class  LocaleKeys {
   static const current_wallet_address = 'current_wallet_address';
   static const new_wallet_address = 'new_wallet_address';
   static const cancel = 'cancel';
+  static const install_google_identifier = 'install_google_identifier';
+  static const open_the_app_add_account = 'open_the_app_add_account';
+  static const enter_six_code_and_connect = 'enter_six_code_and_connect';
+  static const sss = 'sss';
 
 }
