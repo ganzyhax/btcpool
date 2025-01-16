@@ -7,7 +7,6 @@ import 'package:btcpool_app/app/views/revenue/bloc/revenue_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/api/bloc/api_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/fa/bloc/fa_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/language/bloc/language_bloc.dart';
-import 'package:btcpool_app/app/views/settings/pages/security/bloc/security_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/subaccount/bloc/subaccount_bloc.dart';
 import 'package:btcpool_app/app/views/signup/bloc/signup_bloc.dart';
 import 'package:btcpool_app/app/views/splash/splash_screen.dart';
@@ -40,6 +39,12 @@ class BTCPool extends StatelessWidget {
           create: (context) => ApiBloc()..add(ApiLoad()),
         ),
         BlocProvider(
+          create: (context) => DashboardBloc()..add(DashboardLoad()),
+        ),
+        BlocProvider(
+          create: (context) => LanguageBloc()..add(LanguageLoad()),
+        ),
+        BlocProvider(
           create: (context) => SubaccountBloc()..add(SubaccountLoad()),
         ),
         BlocProvider(
@@ -47,15 +52,6 @@ class BTCPool extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LoginBloc()..add(LoginLaod()),
-        ),
-        BlocProvider(
-          create: (context) => DashboardBloc()..add(DashboardLoad()),
-        ),
-        BlocProvider(
-          create: (context) => LanguageBloc()..add(LanguageLoad()),
-        ),
-        BlocProvider(
-          create: (context) => SecurityBloc()..add(SecurityLoad()),
         ),
       ],
       child: BlocProvider(

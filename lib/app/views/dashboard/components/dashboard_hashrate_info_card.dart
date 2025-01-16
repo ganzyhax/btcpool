@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:btcpool_app/app/components/custom_line.dart';
 import 'package:btcpool_app/app/views/dashboard/functions/functions.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:btcpool_app/local_data/const.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -34,7 +35,7 @@ class DashboardHashrateInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Cредний хешрейт за 10 минут',
+            LocaleKeys.total_average_hashrate_10min.tr(),
             style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
           ).tr(),
           const SizedBox(
@@ -68,7 +69,7 @@ class DashboardHashrateInfoCard extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'За час',
+                      LocaleKeys.for_hour.tr(),
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],
@@ -92,7 +93,7 @@ class DashboardHashrateInfoCard extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'За день',
+                      LocaleKeys.for_day.tr(),
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],

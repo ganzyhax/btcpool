@@ -4,13 +4,13 @@ import 'package:btcpool_app/app/components/modal/custom_acc_delete_modal.dart';
 import 'package:btcpool_app/app/views/settings/components/settings_item.dart';
 import 'package:btcpool_app/app/views/settings/pages/api/api_page.dart';
 import 'package:btcpool_app/app/views/settings/pages/fa/fa_page.dart';
-import 'package:btcpool_app/app/views/settings/pages/language/language_screen.dart';
-import 'package:btcpool_app/app/views/settings/pages/security/security_screen.dart';
-import 'package:btcpool_app/app/views/settings/pages/subaccount/bloc/subaccount_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/subaccount/subaccount_page.dart';
 import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:btcpool_app/app/views/settings/pages/language/language_screen.dart';
+import 'package:btcpool_app/app/views/settings/pages/subaccount/bloc/subaccount_bloc.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -25,9 +25,8 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
         children: [
-          // Верхняя часть с заголовком
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.blue,
@@ -38,6 +37,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   LocaleKeys.settings.tr(),
@@ -59,7 +59,6 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          // Основная часть с элементами
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -132,22 +131,6 @@ class SettingsScreen extends StatelessWidget {
                       child: SettingsItem(
                         asset: 'assets/icons/key_icon.svg',
                         text: LocaleKeys.fa_auhenticator.tr(),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SecurityScreen()),
-                        );
-                      },
-                      child: SettingsItem(
-                        asset: 'assets/icons/password_icon.svg',
-                        text: LocaleKeys.security.tr(),
                       ),
                     ),
                     const SizedBox(

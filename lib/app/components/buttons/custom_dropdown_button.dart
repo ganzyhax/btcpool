@@ -24,11 +24,11 @@ class CustomDropdownButton extends StatelessWidget {
             borderSide: BorderSide(
               color: Colors.grey,
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
           ),
           filled: true,
           fillColor: Theme.of(context).colorScheme.background,

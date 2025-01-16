@@ -83,7 +83,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return Center(child: CustomIndicator());
             }
             if (state is DashboardLoaded) {
-              log(state.dashboardData['data'].toString());
               return RefreshIndicator(
                 color: AppColors().kPrimaryGreen,
                 onRefresh: () async {

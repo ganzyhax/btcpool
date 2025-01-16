@@ -22,13 +22,6 @@ class DashboardUrlCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            LocaleKeys.url_card_title,
-            style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13),
-          ).tr(),
-          const SizedBox(
-            height: 15,
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: data.map<Widget>((e) {
@@ -63,7 +56,7 @@ class DashboardUrlCard extends StatelessWidget {
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: e['url']));
                           CustomSnackbar()
-                              .showCustomSnackbar(context, 'Copied!', true);
+                              .showCustomSnackbar(context, 'Скопирован!', true);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(13),
@@ -91,7 +84,7 @@ class DashboardUrlCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('Worker',
+              Text('Воркер',
                   style:
                       TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13)),
               const SizedBox(
@@ -140,7 +133,7 @@ class DashboardUrlCard extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text('Password',
+              Text('Пароль',
                   style:
                       TextStyle(color: AppColors().kPrimaryGrey, fontSize: 13)),
               const SizedBox(

@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:btcpool_app/api/api.dart';
 import 'package:btcpool_app/api/api_utils.dart';
-import 'package:btcpool_app/api/local_auth.dart';
 import 'package:btcpool_app/app/views/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/views/login/login_screen.dart';
 import 'package:btcpool_app/app/views/navigator/main_navigator.dart';
-import 'package:btcpool_app/app/views/settings/pages/api/bloc/api_bloc.dart';
-import 'package:btcpool_app/app/views/settings/pages/security/components/lock_page.dart';
 
 import 'package:btcpool_app/app/components/custom_indicator.dart';
 import 'package:btcpool_app/app/components/custom_snackbar.dart';
-import 'package:btcpool_app/app/components/modal/custom_modal.dart';
 import 'package:btcpool_app/app/components/modal/custom_update.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -63,20 +59,12 @@ class _SplashScreenState extends State<SplashScreen> {
           (Route<dynamic> route) => false,
         );
       } else {
-        bool isSecured = await AuthUtils.getIsSecure() ?? false;
-        if (isSecured && isLogged) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => LockPage()),
-            (Route<dynamic> route) => false,
-          );
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) =>
-                    (isLogged) ? CustomNavigationBar() : LoginScreen()),
-            (Route<dynamic> route) => false,
-          );
-        }
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) =>
+                  (isLogged) ? CustomNavigationBar() : LoginScreen()),
+          (Route<dynamic> route) => false,
+        );
       }
     } catch (e) {
       CustomSnackbar()

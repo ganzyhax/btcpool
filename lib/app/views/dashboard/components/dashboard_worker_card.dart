@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:btcpool_app/app/components/custom_line.dart';
 import 'package:btcpool_app/app/views/dashboard/functions/functions.dart';
+import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:btcpool_app/local_data/const.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -27,7 +28,7 @@ class DashboardWorkerCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Активные майнеры',
+            LocaleKeys.active_miners.tr(),
             style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 21),
           ).tr(),
           Text(
@@ -58,7 +59,7 @@ class DashboardWorkerCard extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'Общий',
+                      LocaleKeys.total_obshii.tr(),
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],
@@ -82,7 +83,7 @@ class DashboardWorkerCard extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'Неактивные',
+                      LocaleKeys.inactive.tr(),
                       style: TextStyle(color: AppColors().kPrimaryGrey),
                     )
                   ],
