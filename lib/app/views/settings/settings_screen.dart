@@ -6,6 +6,7 @@ import 'package:btcpool_app/app/views/settings/pages/api/api_page.dart';
 import 'package:btcpool_app/app/views/settings/pages/fa/fa_page.dart';
 import 'package:btcpool_app/app/views/settings/pages/subaccount/subaccount_page.dart';
 import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:btcpool_app/local_data/const.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:btcpool_app/app/views/settings/pages/language/language_screen.dart';
@@ -24,41 +25,8 @@ class SettingsScreen extends StatelessWidget {
       key: scaffoldKey,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 50),
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  LocaleKeys.settings.tr(),
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  LocaleKeys.account.tr(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -66,6 +34,14 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      LocaleKeys.settings.tr(),
+                      style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors().kPrimaryGreen),
+                    ),
+                    SizedBox(height: 20),
                     Text(
                       LocaleKeys.subaccount_settings,
                       style: const TextStyle(

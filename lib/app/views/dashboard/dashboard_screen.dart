@@ -44,8 +44,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60), child: CustomAppBar()),
+      // appBar: PreferredSize(
+      //     preferredSize: const Size.fromHeight(60), child: CustomAppBar()),
       body: BlocListener<DashboardBloc, DashboardState>(
         listener: (context, state) {
           if (state is DashboardInternetException) {

@@ -19,7 +19,7 @@ class ApiClient {
     int retryCount = 0;
     log('Trtying get ' + url.toString());
 
-    while (retryCount < 3) {
+    while (retryCount < 5) {
       final token = await AuthUtils.getToken('accessToken');
       final response = await http.get(url,
           headers: (isJson == true)
@@ -56,7 +56,7 @@ class ApiClient {
           retryCount++;
           print(
               'Attempt $retryCount: Error ${response.statusCode} - ${response.reasonPhrase}');
-          if (retryCount >= 3) {
+          if (retryCount >= 5) {
             return null;
           }
         }
@@ -223,7 +223,7 @@ class ApiClient {
     final token = await AuthUtils.getToken('accessToken');
     final url = Uri.parse('$baseUrl/$endpoint');
     int retryCount = 0;
-    while (retryCount < 3) {
+    while (retryCount < 5) {
       final response = await http.delete(
         url,
         headers: {
@@ -257,7 +257,7 @@ class ApiClient {
             retryCount++;
             print(
                 'Attempt $retryCount: Error ${response.statusCode} - ${response.reasonPhrase}');
-            if (retryCount >= 3) {
+            if (retryCount >= 5) {
               // print('Max retries reached. Failing with error.');
               return null;
             }
@@ -276,7 +276,7 @@ class ApiClient {
     final token = await AuthUtils.getToken('accessToken');
     final url = Uri.parse('$baseUrl/$endpoint');
     int retryCount = 0;
-    while (retryCount < 3) {
+    while (retryCount < 5) {
       final response = await http.patch(
         url,
         headers: {
@@ -309,7 +309,7 @@ class ApiClient {
           retryCount++;
           print(
               'Attempt $retryCount: Error ${response.statusCode} - ${response.reasonPhrase}');
-          if (retryCount >= 3) {
+          if (retryCount >= 5) {
             // print('Max retries reached. Failing with error.');
             return null;
           }
