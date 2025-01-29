@@ -49,9 +49,10 @@ class SubaccountBloc extends Bloc<SubaccountEvent, SubaccountState> {
             'api/v1/pools/sub_account/create/',
             (selectedSubAccounts.length != 0)
                 ? {
-                    'crypto_currency': "BTC",
-                    'earning_scheme_id':
-                        (method == 'FPPS') ? 1.toString() : 2.toString(),
+                    'crypto_currency': event.currency,
+                    'earning_scheme_id': (event.selectedMethod == 'FPPS')
+                        ? 1.toString()
+                        : 2.toString(),
                     'name': event.name,
                     'wallet_address': event.wallet,
                     'virtual_sub_accounts': selectedSubAccounts

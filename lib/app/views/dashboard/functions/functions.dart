@@ -83,4 +83,10 @@ class DashboardFunctions {
     double ph = th / 1000;
     return [ph.toStringAsFixed(2), 'PH/s'];
   }
+
+  List hashrateConverterLTC(double hash, int thFix) {
+    double gh = hash / 1000;
+
+    return [gh.toStringAsFixed(2), 'GH/s'];
+  }
 }

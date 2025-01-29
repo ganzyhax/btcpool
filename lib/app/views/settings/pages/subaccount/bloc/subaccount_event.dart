@@ -8,13 +8,25 @@ class SubaccountLoad extends SubaccountEvent {}
 class SubaccountCreate extends SubaccountEvent {
   final String name;
   final String wallet;
-  SubaccountCreate({required this.name, required this.wallet});
+  final String selectedCurrency;
+  final String selectedMethod;
+  SubaccountCreate(
+      {required this.name,
+      required this.wallet,
+      required this.selectedCurrency,
+      required this.selectedMethod});
 }
 
 class SubaccountNewCreate extends SubaccountEvent {
   final String name;
   final String wallet;
-  SubaccountNewCreate({required this.name, required this.wallet});
+  final String selectedMethod;
+  final String currency;
+  SubaccountNewCreate(
+      {required this.name,
+      required this.wallet,
+      required this.currency,
+      required this.selectedMethod});
 }
 
 class SubaccountSetMethod extends SubaccountEvent {

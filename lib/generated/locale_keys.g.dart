@@ -129,7 +129,6 @@ abstract class  LocaleKeys {
   static const hour = 'hour';
   static const day = 'day';
   static const connection_to_mining = 'connection_to_mining';
-  static const worker_name_after_the_dot_can_be_arbitrary_must_consist_of_numbers_or_lowercase_letters_and_maximum_length_is_30_characters = 'worker_name_after_the_dot_can_be_arbitrary_must_consist_of_numbers_or_lowercase_letters_and_maximum_length_is_30_characters';
   static const worker = 'worker';
   static const password = 'password';
   static const earnings = 'earnings';
@@ -199,6 +198,7 @@ abstract class  LocaleKeys {
   static const install_google_identifier = 'install_google_identifier';
   static const open_the_app_add_account = 'open_the_app_add_account';
   static const enter_six_code_and_connect = 'enter_six_code_and_connect';
-  static const sss = 'sss';
+  static const short_hashrate_1h = 'short_hashrate_1h';
+  static const short_hashrate_24h = 'short_hashrate_24h';
 
 }

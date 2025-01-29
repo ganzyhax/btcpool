@@ -12,10 +12,12 @@ final class DashboardLoaded extends DashboardState {
   var hashrates;
   double btcPrice;
   int selectedInterval;
+  String selectedSubAccountCurrency;
   DashboardLoaded(
       {required this.subAccounts,
       required this.strumUrls,
       required this.btcPrice,
+      required this.selectedSubAccountCurrency,
       required this.selectedInterval,
       required this.selectedSubAccout,
       required this.dashboardData,

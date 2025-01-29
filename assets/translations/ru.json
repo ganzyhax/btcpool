@@ -204,7 +204,8 @@
     "install_google_identifier":"Установите приложение Google Идентификатор (iOS/Android)",
     "open_the_app_add_account":"Откройте приложение и добавьте свою учетную запись BTCPool. Для этого отсканируйте QR-код или введите код:",
     "enter_six_code_and_connect":"Введите 6-значный код из приложения и нажмите «Подключить»",
-    "sss":"sss",
+    "short_hashrate_1h":"Хешрейт/1ч",
+  "short_hashrate_24h":"Хешрейт/24ч",
     "password": "Пароль"
   }
   

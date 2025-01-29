@@ -18,7 +18,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     var dashboardData;
     var hashrates;
     var strumUrls;
-
+    String selectedSubAccountCurrency = 'BTC';
     double btcPrice = 60000;
     int selectedInterval = 0;
     on<DashboardEvent>((event, emit) async {
@@ -44,6 +44,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
                     null) {
               emit(DashboardLoaded(
                   btcPrice: btcPrice,
+                  selectedSubAccountCurrency: selectedSubAccountCurrency,
                   selectedInterval: selectedInterval,
                   strumUrls: strumUrlss,
                   dashboardData: UserData().dashboardMap[
@@ -56,6 +57,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
                   selectedSubAccout: selectedSubAccount));
             } else {
               emit(DashboardLoaded(
+                selectedSubAccountCurrency: selectedSubAccountCurrency,
                 btcPrice: btcPrice,
                 selectedInterval: selectedInterval,
                 subAccounts: UserData().dataSubAccounts,
@@ -68,6 +70,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           } else {
             log('Dashboard NOT CACHE loaded ');
             emit(DashboardLoaded(
+              selectedSubAccountCurrency: selectedSubAccountCurrency,
               btcPrice: btcPrice,
               selectedInterval: selectedInterval,
               subAccounts: UserData().dataSubAccounts,
@@ -81,6 +84,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           log('Dashboard NOT CACHE loaded ');
           emit(DashboardLoaded(
             btcPrice: btcPrice,
+            selectedSubAccountCurrency: selectedSubAccountCurrency,
             selectedInterval: selectedInterval,
             subAccounts: UserData().dataSubAccounts,
             selectedSubAccout: selectedSubAccount,
@@ -111,6 +115,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
               if (UserData().dataSubAccounts[selectedSubAccount] == null) {
                 selectedSubAccount = 0;
               }
+              selectedSubAccountCurrency = UserData()
+                  .dataSubAccounts[selectedSubAccount]['crypto_currency'];
               emitAllDataState(
                   strumUrlss: null, hashratess: null, dashboardDatas: null);
               strumUrls ??= await ApiClient.get(
@@ -187,6 +193,19 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             UserData().dataSubAccounts[selectedSubAccount]['name'])) {
           emitAllDataState(strumUrlss: strumUrls);
           try {
+            log(selectedSubAccountCurrency + 'aaa');
+            log(UserData().dataSubAccounts[selectedSubAccount]
+                    ['crypto_currency'] +
+                ' sss');
+            if (selectedSubAccountCurrency !=
+                UserData().dataSubAccounts[selectedSubAccount]
+                    ['crypto_currency']) {
+              strumUrls = await ApiClient.get(
+                  'api/v1/pools/sub_account/stratum_url/?sub_account_name=' +
+                      UserData().dataSubAccounts[selectedSubAccount]['name']);
+            }
+            selectedSubAccountCurrency = UserData()
+                .dataSubAccounts[selectedSubAccount]['crypto_currency'];
             dashboardData = await ApiClient.get(
                 'api/v1/pools/sub_account/summary/?sub_account_name=' +
                     UserData().dataSubAccounts[selectedSubAccount]['name']);
@@ -218,6 +237,20 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             hashratess: hashrates,
           );
           try {
+            if (selectedSubAccountCurrency !=
+                UserData().dataSubAccounts[selectedSubAccount]
+                    ['crypto_currency']) {
+              strumUrls = await ApiClient.get(
+                  'api/v1/pools/sub_account/stratum_url/?sub_account_name=' +
+                      UserData().dataSubAccounts[selectedSubAccount]['name']);
+            }
+            selectedSubAccountCurrency = UserData()
+                .dataSubAccounts[selectedSubAccount]['crypto_currency'];
+            emitAllDataState(
+              dashboardDatas: dashboardData,
+              strumUrlss: strumUrls,
+              hashratess: hashrates,
+            );
             await UserData().updateSubAccountData(
                 UserData().dataSubAccounts[selectedSubAccount]['name']);
             emitAllDataState(
@@ -271,6 +304,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             selectedInterval: selectedInterval,
             subAccounts: null,
             selectedSubAccout: selectedSubAccount,
+            selectedSubAccountCurrency: selectedSubAccountCurrency,
             strumUrls: null,
             hashrates: null,
             dashboardData: null,

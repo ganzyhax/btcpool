@@ -143,7 +143,6 @@ class CodegenLoader extends AssetLoader{
   "hour": "сағат",
   "day": "күн",
   "connection_to_mining": "Майнингке қосылу",
-  "worker_name_after_the_dot_can_be_arbitrary_must_consist_of_numbers_or_lowercase_letters_and_maximum_length_is_30_characters": "Жұмысшының аты (нүктеден кейін) еркін болуы мүмкін, тек цифрлар немесе кіші әріптерден тұруы керек және максималды ұзындығы 30 таңба болуы керек.",
   "worker": "Жұмысшы",
   "password": "Пароль",
   "earnings": "Табыс",
@@ -213,7 +212,8 @@ class CodegenLoader extends AssetLoader{
   "install_google_identifier": "Google идентификатор қолданбасын орнатыңыз (iOS/Android)",
   "open_the_app_add_account": "Қолданбаны ашып, BTCPool аккаунтыңызды қосыңыз. Ол үшін QR кодты сканерлеңіз немесе кодты енгізіңіз:",
   "enter_six_code_and_connect": "Қолданбадағы 6 таңбалы кодты енгізіп, «Қосу» батырмасын басыңыз",
-  "sss": "sss"
+  "short_hashrate_1h": "Хешрейт/1с",
+  "short_hashrate_24h": "Хешрейт/24с"
 };
 static const Map<String,dynamic> ru = {
   "security_dont_support": "Нет разрешения или устройство не поддерживается!",
@@ -402,7 +402,8 @@ static const Map<String,dynamic> ru = {
   "install_google_identifier": "Установите приложение Google Идентификатор (iOS/Android)",
   "open_the_app_add_account": "Откройте приложение и добавьте свою учетную запись BTCPool. Для этого отсканируйте QR-код или введите код:",
   "enter_six_code_and_connect": "Введите 6-значный код из приложения и нажмите «Подключить»",
-  "sss": "sss",
+  "short_hashrate_1h": "Хешрейт/1ч",
+  "short_hashrate_24h": "Хешрейт/24ч",
   "password": "Пароль"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"kk": kk, "ru": ru};

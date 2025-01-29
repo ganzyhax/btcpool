@@ -8,10 +8,11 @@ class DashboardInfoCard extends StatelessWidget {
   final data;
   final String title;
   final double btcPrice;
-
+  final String cryptocurrency;
   const DashboardInfoCard(
       {super.key,
       required this.data,
+      required this.cryptocurrency,
       required this.title,
       required this.btcPrice});
 
@@ -80,7 +81,7 @@ class DashboardInfoCard extends StatelessWidget {
             height: 10,
           ),
           Text(
-            'BTC',
+            cryptocurrency,
             style: TextStyle(color: AppColors().kPrimaryGrey, fontSize: 16),
             textAlign: TextAlign.end,
           )

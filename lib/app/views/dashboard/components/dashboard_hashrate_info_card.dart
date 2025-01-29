@@ -12,19 +12,29 @@ class DashboardHashrateInfoCard extends StatelessWidget {
   final data;
   final String title;
   final bool isHashrate;
-
+  final String selectedCrpyto;
   const DashboardHashrateInfoCard(
       {super.key,
       required this.data,
+      required this.selectedCrpyto,
       required this.title,
       required this.isHashrate});
 
   @override
   Widget build(BuildContext context) {
-    var h10 = DashboardFunctions().hashrateConverter(data[0].toDouble(), 2);
-    var h24 = DashboardFunctions().hashrateConverter(data[1].toDouble(), 2);
-    var h1 = DashboardFunctions().hashrateConverter(data[2].toDouble(), 2);
-
+    log(data.toString());
+    var h10;
+    var h24;
+    var h1;
+    if (selectedCrpyto == 'LTC') {
+      h10 = DashboardFunctions().hashrateConverterLTC(data[0].toDouble(), 2);
+      h24 = DashboardFunctions().hashrateConverterLTC(data[0].toDouble(), 2);
+      h1 = DashboardFunctions().hashrateConverterLTC(data[1].toDouble(), 2);
+    } else {
+      h10 = DashboardFunctions().hashrateConverter(data[0].toDouble(), 2);
+      h24 = DashboardFunctions().hashrateConverter(data[0].toDouble(), 2);
+      h1 = DashboardFunctions().hashrateConverter(data[1].toDouble(), 2);
+    }
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(

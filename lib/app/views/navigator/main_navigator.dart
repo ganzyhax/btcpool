@@ -1,7 +1,9 @@
 import 'package:btcpool_app/app/components/subaccount_card.dart';
 import 'package:btcpool_app/app/views/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/views/navigator/bloc/main_navigator_bloc.dart';
+import 'package:btcpool_app/app/views/navigator/components/language_dropdown.dart';
 import 'package:btcpool_app/generated/locale_keys.g.dart';
+import 'package:btcpool_app/local_data/const.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,17 +31,14 @@ class CustomNavigationBar extends StatelessWidget {
                 },
               ),
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: (Theme.of(context).brightness ==
-                                  Brightness.dark)
-                              ? Image.asset('assets/images/btcpool_logo.png')
-                              : Image.asset('assets/images/btcpool_logo.png')),
-                    ],
-                  ),
+                  SizedBox(
+                      width: 100,
+                      child: (Theme.of(context).brightness == Brightness.dark)
+                          ? Image.asset('assets/images/btcpool_logo.png')
+                          : Image.asset('assets/images/btcpool_logo.png')),
+                  LanguageDropdown(),
                 ],
               ),
             ),
@@ -55,15 +54,14 @@ class CustomNavigationBar extends StatelessWidget {
                   ListTile(
                     leading: SvgPicture.asset(
                       'assets/icons/dashboard_icon.svg',
-                      color: (state.index == 0)
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
+                      color:
+                          (state.index == 0) ? AppColors().kPrimaryGreen : null,
                     ),
                     title: Text(
                       LocaleKeys.dashboard.tr(),
                       style: TextStyle(
                         color: (state.index == 0)
-                            ? Theme.of(context).colorScheme.primary
+                            ? AppColors().kPrimaryGreen
                             : null,
                       ),
                     ),
@@ -79,15 +77,14 @@ class CustomNavigationBar extends StatelessWidget {
                   ListTile(
                     leading: SvgPicture.asset(
                       'assets/icons/payment_icon.svg',
-                      color: (state.index == 1)
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
+                      color:
+                          (state.index == 1) ? AppColors().kPrimaryGreen : null,
                     ),
                     title: Text(
                       LocaleKeys.revenue.tr(),
                       style: TextStyle(
                         color: (state.index == 1)
-                            ? Theme.of(context).colorScheme.primary
+                            ? AppColors().kPrimaryGreen
                             : null,
                       ),
                     ),
@@ -100,16 +97,15 @@ class CustomNavigationBar extends StatelessWidget {
                   ),
                   ListTile(
                     leading: SvgPicture.asset(
-                      'assets/icons/settings_icon.svg',
-                      color: (state.index == 2)
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
+                      'assets/icons/workers_icon.svg',
+                      color:
+                          (state.index == 2) ? AppColors().kPrimaryGreen : null,
                     ),
                     title: Text(
-                      LocaleKeys.settings.tr(),
+                      LocaleKeys.workers.tr(),
                       style: TextStyle(
                         color: (state.index == 2)
-                            ? Theme.of(context).colorScheme.primary
+                            ? AppColors().kPrimaryGreen
                             : null,
                       ),
                     ),
@@ -117,6 +113,27 @@ class CustomNavigationBar extends StatelessWidget {
                     onTap: () {
                       BlocProvider.of<MainNavigatorBloc>(context)
                           .add(MainNavigatorChangePage(index: 2));
+                      Navigator.pop(context); // Close drawer
+                    },
+                  ),
+                  ListTile(
+                    leading: SvgPicture.asset(
+                      'assets/icons/settings_icon.svg',
+                      color:
+                          (state.index == 3) ? AppColors().kPrimaryGreen : null,
+                    ),
+                    title: Text(
+                      LocaleKeys.settings.tr(),
+                      style: TextStyle(
+                        color: (state.index == 3)
+                            ? AppColors().kPrimaryGreen
+                            : null,
+                      ),
+                    ),
+                    selected: state.index == 3,
+                    onTap: () {
+                      BlocProvider.of<MainNavigatorBloc>(context)
+                          .add(MainNavigatorChangePage(index: 3));
                       Navigator.pop(context); // Close drawer
                     },
                   ),

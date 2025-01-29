@@ -12,6 +12,7 @@ import 'package:btcpool_app/app/components/custom_indicator.dart';
 import 'package:btcpool_app/app/components/custom_snackbar.dart';
 import 'package:btcpool_app/app/components/modal/custom_modal.dart';
 import 'package:btcpool_app/app/components/modal/custom_update.dart';
+import 'package:btcpool_app/app/views/settings/pages/subaccount/components/subaccount_card.dart';
 import 'package:btcpool_app/local_data/const.dart';
 import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:btcpool_app/utils/applifecycler.dart';
@@ -44,8 +45,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      // appBar: PreferredSize(
-      //     preferredSize: const Size.fromHeight(60), child: CustomAppBar()),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: CustomAppBar(
+            title: LocaleKeys.subaccounts.tr(),
+          )),
       body: BlocListener<DashboardBloc, DashboardState>(
         listener: (context, state) {
           if (state is DashboardInternetException) {
@@ -102,6 +106,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 children: [
                                   DashboardInfoCard(
                                     btcPrice: state.btcPrice,
+                                    cryptocurrency:
+                                        state.selectedSubAccountCurrency,
                                     title: LocaleKeys.balance,
                                     data: state.dashboardData['data']
                                         ['balance'],
@@ -110,6 +116,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 10,
                                   ),
                                   DashboardHashrateInfoCard(
+                                    selectedCrpyto:
+                                        state.selectedSubAccountCurrency,
                                     title: LocaleKeys.hashrate_card_t1,
                                     isHashrate: false,
                                     data: [
@@ -176,7 +184,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "1 ",
+                                              "10 ",
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   color:
@@ -184,7 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             Text(
-                                              LocaleKeys.hour,
+                                              'MIN',
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   color:
@@ -307,6 +315,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           bottom: 25),
                                       width: MediaQuery.of(context).size.width,
                                       child: MiningPowerChart(
+                                          currentCurrency:
+                                              state.selectedSubAccountCurrency,
                                           times: state.hashrates
                                               .map((data) {
                                                 return DateTime

@@ -4,6 +4,7 @@ import 'package:btcpool_app/app/views/dashboard/dashboard_screen.dart';
 import 'package:btcpool_app/app/views/login/login_screen.dart';
 import 'package:btcpool_app/app/views/revenue/revenue_screen.dart';
 import 'package:btcpool_app/app/views/settings/settings_screen.dart';
+import 'package:btcpool_app/app/views/workers/workers_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -16,6 +17,7 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, MainNavigatorState> {
     List screens = [
       DashboardScreen(),
       RevenueScreen(),
+      WorkersScreen(),
       SettingsScreen(),
     ];
     int index = 0;

@@ -31,6 +31,8 @@ class _SubAccountCreateNewAccountState
   TextEditingController h2 = TextEditingController();
   TextEditingController h3 = TextEditingController();
   TextEditingController empty = TextEditingController();
+  String selectedMethod = 'FPPS';
+  String selectedCurrency = 'BTC';
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -124,13 +126,22 @@ class _SubAccountCreateNewAccountState
                           height: 14,
                         ),
                         CustomDropdownButton(
-                            function: (value) {},
+                            function: (value) {
+                              selectedMethod = value!;
+                              setState(() {});
+                            },
                             selectedValue: 'FPPS',
                             items: [
                               const DropdownMenuItem(
                                 value: 'FPPS',
                                 child: Text(
                                   'FPPS',
+                                ),
+                              ),
+                              const DropdownMenuItem(
+                                value: 'PPS',
+                                child: Text(
+                                  'PPS',
                                 ),
                               ),
                             ]),
@@ -353,7 +364,10 @@ class _SubAccountCreateNewAccountState
                           function: () {
                             BlocProvider.of<SubaccountBloc>(context).add(
                                 SubaccountNewCreate(
-                                    name: name.text, wallet: wallet.text));
+                                    selectedMethod: selectedMethod,
+                                    currency: selectedCurrency,
+                                    name: name.text,
+                                    wallet: wallet.text));
                           },
                         ),
                       ],

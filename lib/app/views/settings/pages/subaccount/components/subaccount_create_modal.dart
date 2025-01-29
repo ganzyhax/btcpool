@@ -25,6 +25,8 @@ class _SubaccountCreateModalState extends State<SubaccountCreateModal> {
   TextEditingController h2 = TextEditingController();
   TextEditingController h3 = TextEditingController();
   TextEditingController empty = TextEditingController();
+  String selectedMethod = 'FPPS';
+  String selectedCurrency = 'BTC';
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -140,12 +142,48 @@ class _SubaccountCreateModalState extends State<SubaccountCreateModal> {
                                 const SizedBox(
                                   height: 14,
                                 ),
+                                Text(LocaleKeys.currency.tr()),
+                                const SizedBox(
+                                  height: 14,
+                                ),
+                                CustomDropdownButton(
+                                    function: (value) {
+                                      selectedCurrency = value!;
+                                      setState(() {});
+                                    },
+                                    selectedValue: 'BTC',
+                                    items: [
+                                      const DropdownMenuItem(
+                                        value: 'BTC',
+                                        child: Text(
+                                          'BTC',
+                                        ),
+                                      ),
+                                      const DropdownMenuItem(
+                                        value: 'BCH',
+                                        child: Text(
+                                          'BCH',
+                                        ),
+                                      ),
+                                      const DropdownMenuItem(
+                                        value: 'LTC',
+                                        child: Text(
+                                          'LTC',
+                                        ),
+                                      ),
+                                    ]),
+                                const SizedBox(
+                                  height: 14,
+                                ),
                                 Text(LocaleKeys.method.tr()),
                                 const SizedBox(
                                   height: 14,
                                 ),
                                 CustomDropdownButton(
-                                    function: (value) {},
+                                    function: (value) {
+                                      selectedMethod = value!;
+                                      setState(() {});
+                                    },
                                     selectedValue: 'FPPS',
                                     items: [
                                       const DropdownMenuItem(
@@ -172,9 +210,10 @@ class _SubaccountCreateModalState extends State<SubaccountCreateModal> {
                                           ? false
                                           : true,
                                   function: () {
-                                    print('asdadasd');
                                     BlocProvider.of<SubaccountBloc>(context)
                                         .add(SubaccountCreate(
+                                            selectedCurrency: selectedCurrency,
+                                            selectedMethod: selectedMethod,
                                             name: name.text,
                                             wallet: wallet.text));
                                   },

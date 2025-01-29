@@ -198,5 +198,6 @@
   "install_google_identifier":"Google идентификатор қолданбасын орнатыңыз (iOS/Android)",
   "open_the_app_add_account":"Қолданбаны ашып, BTCPool аккаунтыңызды қосыңыз. Ол үшін QR кодты сканерлеңіз немесе кодты енгізіңіз:",
   "enter_six_code_and_connect":"Қолданбадағы 6 таңбалы кодты енгізіп, «Қосу» батырмасын басыңыз",
-  "sss":"sss"
+  "short_hashrate_1h":"Хешрейт/1с",
+  "short_hashrate_24h":"Хешрейт/24с"
 }
