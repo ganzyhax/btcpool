@@ -10,9 +10,10 @@ import 'package:flutter/material.dart';
 
 class WorkersCard extends StatelessWidget {
   final data;
-
+  final String selectedCrypto;
   const WorkersCard({
     super.key,
+    required this.selectedCrypto,
     required this.data,
   });
 
@@ -32,8 +33,9 @@ class WorkersCard extends StatelessWidget {
     String hashrate10minType;
     String hashrate1hType;
     String hashrate24hType;
-    log(data['crypto_currency'].toString());
-    if (data['crypto_currency'] == 'BTC') {
+    log('TASAK');
+    log(selectedCrypto);
+    if (selectedCrypto == 'BTC') {
       hashrate10min =
           DashboardFunctions().hashrateConverter(data['hashrate_10m'], 3)[0];
 

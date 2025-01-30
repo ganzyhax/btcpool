@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 
 class WorkersInfoPage extends StatefulWidget {
   final data;
-  const WorkersInfoPage({super.key, required this.data});
+  final String cryptoCurrency;
+  const WorkersInfoPage(
+      {super.key, required this.data, required this.cryptoCurrency});
 
   @override
   State<WorkersInfoPage> createState() => _WorkersInfoPageState();
@@ -26,32 +28,32 @@ class _WorkersInfoPageState extends State<WorkersInfoPage> {
   @override
   void initState() {
     super.initState();
-    getHashrateChart();
+    // getHashrateChart();
   }
 
-  Future<void> getHashrateChart() async {
-    try {
-      int selectedSubAccount = await AuthUtils.getIndexSubAccount();
+  // Future<void> getHashrateChart() async {
+  //   try {
+  //     int selectedSubAccount = await AuthUtils.getIndexSubAccount();
 
-      String subAccountName =
-          UserData().dataSubAccounts[selectedSubAccount]['name'];
-      String workerName = widget.data['worker_name'];
+  //     String subAccountName =
+  //         UserData().dataSubAccounts[selectedSubAccount]['name'];
+  //     String workerName = widget.data['worker_name'];
 
-      hashrates = await ApiClient.get(
-        'api/v1/pools/sub_accounts/worker_charts'
-        '?sub_account_name=$subAccountName'
-        '&worker_name=$workerName',
-      );
+  //     hashrates = await ApiClient.get(
+  //       'api/v1/pools/sub_accounts/worker_charts'
+  //       '?sub_account_name=$subAccountName'
+  //       '&worker_name=$workerName',
+  //     );
 
-      // Trigger UI update
-      setState(() {});
+  //     // Trigger UI update
+  //     setState(() {});
 
-      log(hashrates.toString()); // Debugging output
-    } catch (e) {
-      // Handle errors (e.g., network issues or API response problems)
-      log('Error fetching hashrates: $e');
-    }
-  }
+  //     log(hashrates.toString()); // Debugging output
+  //   } catch (e) {
+  //     // Handle errors (e.g., network issues or API response problems)
+  //     log('Error fetching hashrates: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +70,8 @@ class _WorkersInfoPageState extends State<WorkersInfoPage> {
     String hashrate10minType;
     String hashrate1hType;
     String hashrate24hType;
-
-    if (widget.data['crypto_currency'] == 'BTC') {
+    log(widget.data.toString());
+    if (widget.cryptoCurrency == 'BTC') {
       hashrate10min = DashboardFunctions()
           .hashrateConverter(widget.data['hashrate_10m'], 3)[0];
 
@@ -127,18 +129,18 @@ class _WorkersInfoPageState extends State<WorkersInfoPage> {
             SizedBox(
               height: 15,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  LocaleKeys.chart.tr(),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       LocaleKeys.chart.tr(),
+            //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
             (hashrates.isNotEmpty)
                 ? Container(
                     decoration: BoxDecoration(

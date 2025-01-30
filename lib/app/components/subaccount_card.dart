@@ -4,6 +4,7 @@ import 'package:btcpool_app/app/views/revenue/bloc/revenue_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/api/bloc/api_bloc.dart';
 import 'package:btcpool_app/app/views/settings/pages/subaccount/subaccount_page.dart';
 import 'package:btcpool_app/app/components/subaccount_item.dart';
+import 'package:btcpool_app/app/views/workers/bloc/workers_bloc.dart';
 import 'package:btcpool_app/local_data/const.dart';
 import 'package:btcpool_app/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -79,9 +80,9 @@ class SubAccountCard extends StatelessWidget {
                                         BlocProvider.of<DashboardBloc>(context)
                                             .add(DashboardChooseSubAccount(
                                                 index: index));
-                                        // BlocProvider.of<WorkersBloc>(context)
-                                        //     .add(WorkersSubAccountIndexChange(
-                                        //         index: index));
+                                        BlocProvider.of<WorkersBloc>(context)
+                                            .add(WorkersSubAccountIndexChange(
+                                                index: index));
                                         BlocProvider.of<RevenueBloc>(context)
                                             .add(RevenueSubAccountIndexChange(
                                                 index: index));

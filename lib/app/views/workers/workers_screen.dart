@@ -5,6 +5,7 @@ import 'package:btcpool_app/app/components/custom_indicator.dart';
 import 'package:btcpool_app/app/components/textfields/custom_textfiled.dart';
 import 'package:btcpool_app/app/views/dashboard/bloc/dashboard_bloc.dart';
 import 'package:btcpool_app/app/views/dashboard/components/dashboard_hashrate_info_card.dart';
+import 'package:btcpool_app/app/views/dashboard/components/dashboard_worker_card.dart';
 import 'package:btcpool_app/app/views/workers/bloc/workers_bloc.dart';
 import 'package:btcpool_app/app/views/workers/components/workers_card.dart';
 import 'package:btcpool_app/app/views/workers/components/workers_hashrate_card.dart';
@@ -53,150 +54,121 @@ class WorkersScreen extends StatelessWidget {
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    BlocBuilder<DashboardBloc, DashboardState>(
-                                      builder: (context, stateDashboard) {
-                                        if (stateDashboard is DashboardLoaded) {
-                                          log(state.dashboardData.toString() +
-                                              'adadad');
-
-                                          return (stateDashboard
-                                                      .dashboardData !=
-                                                  null)
-                                              ? Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    DashboardHashrateInfoCard(
-                                                      selectedCrpyto: stateDashboard
-                                                          .selectedSubAccountCurrency,
-                                                      title: LocaleKeys
-                                                          .workers_card_t1,
-                                                      data: [
-                                                        stateDashboard.dashboardData[
-                                                                    'data'][
-                                                                'active_workers'] ??
-                                                            'N/A',
-                                                        stateDashboard.dashboardData[
-                                                                    'data'][
-                                                                'unactive_workers'] ??
-                                                            'N/A'
-                                                      ],
-                                                      isHashrate: true,
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    SingleChildScrollView(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      child: Row(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              BlocProvider.of<
-                                                                          WorkersBloc>(
-                                                                      context)
-                                                                  .add(WorkersChangeIndex(
-                                                                      index:
-                                                                          0));
-                                                            },
-                                                            child:
-                                                                WorkersTabCard(
-                                                              title: LocaleKeys
-                                                                  .all,
-                                                              data: (stateDashboard.dashboardData['data']['active_workers'] +
-                                                                      stateDashboard
-                                                                              .dashboardData['data']
-                                                                          [
-                                                                          'unactive_workers'] +
-                                                                      stateDashboard
-                                                                              .dashboardData['data']
-                                                                          [
-                                                                          'unactive_workers'])
-                                                                  .toString(),
-                                                              isSelected:
-                                                                  (state.selectedTab ==
-                                                                          0)
-                                                                      ? true
-                                                                      : false,
-                                                              color:
-                                                                  Colors.green,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              BlocProvider.of<
-                                                                          WorkersBloc>(
-                                                                      context)
-                                                                  .add(WorkersChangeIndex(
-                                                                      index:
-                                                                          1));
-                                                            },
-                                                            child:
-                                                                WorkersTabCard(
-                                                              title: LocaleKeys
-                                                                  .online,
-                                                              data: stateDashboard
-                                                                  .dashboardData[
-                                                                      'data'][
-                                                                      'active_workers']
-                                                                  .toString(),
-                                                              isSelected:
-                                                                  (state.selectedTab ==
-                                                                          1)
-                                                                      ? true
-                                                                      : false,
-                                                              color:
-                                                                  Colors.green,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              BlocProvider.of<
-                                                                          WorkersBloc>(
-                                                                      context)
-                                                                  .add(WorkersChangeIndex(
-                                                                      index:
-                                                                          2));
-                                                            },
-                                                            child:
-                                                                WorkersTabCard(
-                                                              title: LocaleKeys
-                                                                  .offline,
-                                                              data: stateDashboard
-                                                                  .dashboardData[
-                                                                      'data'][
-                                                                      'unactive_workers']
-                                                                  .toString(),
-                                                              isSelected:
-                                                                  (state.selectedTab ==
-                                                                          2)
-                                                                      ? true
-                                                                      : false,
-                                                              color: Colors.red,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Center(
-                                                  child: CustomIndicator());
-                                        }
-                                        return Center(
-                                          child: CustomIndicator(),
-                                        );
-                                      },
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        DashboardHashrateInfoCard(
+                                          selectedCrpyto:
+                                              state.selectedSubAccountCurrency,
+                                          title: LocaleKeys.workers_card_t1,
+                                          data: [
+                                            state.dashboardData['data']
+                                                ['hashrate_10min'],
+                                            state.dashboardData['data']
+                                                ['hashrate_1hour'],
+                                            state.dashboardData['data']
+                                                ['hashrate_24hour'],
+                                          ],
+                                          isHashrate: true,
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
+                                        ),
+                                        DashboardWorkerCard(
+                                          data: [
+                                            state.dashboardData['data']
+                                                ['active_workers'],
+                                            state.dashboardData['data']
+                                                ['unactive_workers']
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  BlocProvider.of<WorkersBloc>(
+                                                          context)
+                                                      .add(WorkersChangeIndex(
+                                                          index: 0));
+                                                },
+                                                child: WorkersTabCard(
+                                                  title: LocaleKeys.all,
+                                                  data: (state.dashboardData[
+                                                                  'data'][
+                                                              'active_workers'] +
+                                                          state.dashboardData[
+                                                                  'data'][
+                                                              'unactive_workers'] +
+                                                          state.dashboardData[
+                                                                  'data'][
+                                                              'unactive_workers'])
+                                                      .toString(),
+                                                  isSelected:
+                                                      (state.selectedTab == 0)
+                                                          ? true
+                                                          : false,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  BlocProvider.of<WorkersBloc>(
+                                                          context)
+                                                      .add(WorkersChangeIndex(
+                                                          index: 1));
+                                                },
+                                                child: WorkersTabCard(
+                                                  title: LocaleKeys.online,
+                                                  data: state
+                                                      .dashboardData['data']
+                                                          ['active_workers']
+                                                      .toString(),
+                                                  isSelected:
+                                                      (state.selectedTab == 1)
+                                                          ? true
+                                                          : false,
+                                                  color: Colors.green,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  BlocProvider.of<WorkersBloc>(
+                                                          context)
+                                                      .add(WorkersChangeIndex(
+                                                          index: 2));
+                                                },
+                                                child: WorkersTabCard(
+                                                  title: LocaleKeys.offline,
+                                                  data: state
+                                                      .dashboardData['data']
+                                                          ['unactive_workers']
+                                                      .toString(),
+                                                  isSelected:
+                                                      (state.selectedTab == 2)
+                                                          ? true
+                                                          : false,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(
                                       height: 15,
@@ -308,6 +280,9 @@ class WorkersScreen extends StatelessWidget {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               WorkersInfoPage(
+                                                                cryptoCurrency:
+                                                                    state
+                                                                        .selectedSubAccountCurrency,
                                                                 data: state.tabs[
                                                                         state
                                                                             .selectedTab]
@@ -316,6 +291,8 @@ class WorkersScreen extends StatelessWidget {
                                                     );
                                                   },
                                                   child: WorkersCard(
+                                                    selectedCrypto: state
+                                                        .selectedSubAccountCurrency,
                                                     data: state.tabs[state
                                                         .selectedTab][index],
                                                   ),
