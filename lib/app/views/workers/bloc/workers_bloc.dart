@@ -52,12 +52,11 @@ class WorkersBloc extends Bloc<WorkersEvent, WorkersState> {
 
             for (var data in dataList) {
               log(data.toString());
-              if (data['status'] == 'DEAD') {
-                deadList.add(data);
-              } else if (data['status'] == 'ONLINE') {
+              if (data['status'] == 'ONLINE') {
                 onlineList.add(data);
               } else {
                 offlineList.add(data);
+                deadList.add(data);
               }
               allList.add(data);
             }

@@ -28,10 +28,6 @@ class WorkersTabCard extends StatelessWidget {
             title,
             style: TextStyle(color: (isSelected) ? Colors.white : color),
           ).tr(),
-          Text(
-            ' ' + data,
-            style: TextStyle(color: (isSelected) ? Colors.white : color),
-          ),
         ],
       )),
     );
